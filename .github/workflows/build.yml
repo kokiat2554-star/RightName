@@ -31,6 +31,7 @@ jobs:
           android {
               namespace 'com.nighthunter.game'
               compileSdk 35
+              signingConfigs { debug { storeFile file('nh.jks'); storePassword 'nighthunter'; keyAlias 'nh'; keyPassword 'nighthunter' } }
               defaultConfig {
                   applicationId "com.nighthunter.game"
                   minSdk 21
@@ -58,6 +59,17 @@ jobs:
               </application>
           </manifest>
           EOF
+          # ชื่อแอพ: อ่านจากไฟล์ appname.txt (ถ้ามี) ไม่งั้นใช้ชื่อเดิม
+          if [ -f appname.txt ]; then NAME=$(head -n1 appname.txt | tr -d '\r"&<>/\\'); fi
+          [ -z "$NAME" ] && NAME="นักล่าราตรี"
+          sed -i "s|android:label=\"นักล่าราตรี\"|android:label=\"$NAME\"|" $D/AndroidManifest.xml
+          echo "APPNAME=$NAME" >> $GITHUB_ENV
+          # ไอคอนแอพ: ถ้ามีไฟล์ icon.png ใน repo จะใช้เป็นไอคอน
+          if [ -f icon.png ]; then
+            mkdir -p $D/res/mipmap-xxxhdpi
+            cp icon.png $D/res/mipmap-xxxhdpi/ic_launcher.png
+            sed -i 's|<application |<application android:icon="@mipmap/ic_launcher" |' $D/AndroidManifest.xml
+          fi
           cat > $D/java/com/nighthunter/game/MainActivity.java <<'EOF'
           package com.nighthunter.game;
           import android.app.Activity;
@@ -106,9 +118,13 @@ jobs:
               @Override public void onBackPressed() { web.evaluateJavascript("window.onBack&&window.onBack()", null); }
           }
           EOF
+      - name: Fixed signing key
+        run: echo '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' | base64 -d > proj/app/nh.jks
       - name: Build
         run: cd proj && gradle assembleDebug --no-daemon
+      - name: Rename APK
+        run: cp proj/app/build/outputs/apk/debug/app-debug.apk "proj/$APPNAME.apk"
       - uses: actions/upload-artifact@v4
         with:
           name: NightHunter-apk
-          path: proj/app/build/outputs/apk/debug/app-debug.apk
+          path: proj/*.apk
