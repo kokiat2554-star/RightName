@@ -112,14 +112,24 @@ button{font-family:inherit;color:#fff;border:0;cursor:pointer}
 /* กล่องสุ่ม */
 #cs_t{margin:0}
 #cs_s{font-size:15px;color:#bcc3ee;margin-top:-6px}
-#cs_win{position:relative;width:760px;height:148px;overflow:hidden;border:3px solid #ffd86b;border-radius:14px;background:rgba(0,0,0,.55)}
-#cs_strip{display:flex;position:absolute;left:0;top:8px;will-change:transform}
 .tl{width:116px;height:130px;margin-right:8px;flex:none;border-radius:12px;border:3px solid var(--c);background:linear-gradient(#2c2f5e,#181a38);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4px}
 .tl .ti{font-size:40px;line-height:46px}.tl .tn{font-size:13px;font-weight:800;line-height:1.15}.tl .tv{font-size:12px;color:#ffd86b;margin-top:2px}
 .tl.evo{background:linear-gradient(#6a4a10,#2a1c04);box-shadow:0 0 14px #ffd86b}
 .tl.win{transform:scale(1.07);box-shadow:0 0 22px var(--c)}
-#cs_mark{position:absolute;left:378px;top:0;bottom:0;width:4px;background:#ff5a5a;box-shadow:0 0 12px #ff5a5a}
-#cs_res{min-height:70px;font-size:22px;text-align:center;line-height:1.45;max-width:780px}
+#chest{gap:6px}
+#cs_reels{display:flex;flex-direction:column;gap:6px;align-items:center}
+.cr{display:flex;align-items:center;gap:8px}
+.cwin{position:relative;width:700px;height:var(--rh);overflow:hidden;border:3px solid #ffd86b;border-radius:12px;background:rgba(0,0,0,.55)}
+.cstrip{display:flex;position:absolute;left:0;top:3px;will-change:transform}
+.cmark{position:absolute;left:348px;top:0;bottom:0;width:4px;background:#ff5a5a;box-shadow:0 0 12px #ff5a5a;z-index:2}
+.cpick{width:92px;height:var(--rh);border-radius:12px;background:#3cb15a;font-size:20px;font-weight:800}
+#cs_reels .tl{height:calc(var(--rh) - 12px)}
+#cs_reels.s3 .ti,#cs_reels.s4 .ti,#cs_reels.s5 .ti{font-size:28px;line-height:30px}
+#cs_reels.s3 .tn,#cs_reels.s4 .tn,#cs_reels.s5 .tn{font-size:12px}
+#cs_reels.s4 .tv,#cs_reels.s5 .tv{font-size:11px;margin-top:0}
+#cs_reels.s5 .ti{font-size:24px;line-height:26px}
+#cs_reels.s4 .tl,#cs_reels.s5 .tl{padding:1px}
+#cs_res{min-height:52px;font-size:19px;text-align:center;line-height:1.45;max-width:780px}
 #cs_res small{font-size:15px;color:#cfd4ff}#cs_res .gl{font-size:17px;color:#ffe27a}
 /* ลบสกิล */
 .drow{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;max-width:880px}
@@ -179,7 +189,7 @@ button{font-family:inherit;color:#fff;border:0;cursor:pointer}
 
   <div id="lvl" class="scr ov hidden"><h1 id="lvh">เลเวลอัพ</h1><div class="rw hidden" id="rw"></div><div class="cards" id="cards"></div></div>
   <div id="pause" class="scr ov hidden"><h1>พักเกม</h1><div class="chips" id="pbn" style="max-width:760px"></div><div class="btnrow"><button class="btn" id="resume">▶ เล่นต่อ</button><button class="btn g" id="quit">ออกจากด่าน</button></div></div>
-  <div id="chest" class="scr ov hidden"><h1 id="cs_t"></h1><div id="cs_s"></div><div id="cs_win"><div id="cs_strip"></div><div id="cs_mark"></div></div><div id="cs_res"></div><button class="btn hidden" id="cs_ok">รับรางวัล</button></div>
+  <div id="chest" class="scr ov hidden"><h1 id="cs_t"></h1><div id="cs_s"></div><div id="cs_reels"></div><div id="cs_res"></div></div>
   <div id="delscr" class="scr ov hidden"><h1>🗑 เลือกสกิลที่จะลบ</h1><div class="drow" id="delrow"></div><div id="delmsg"></div><button class="btn g" id="del_c">ยกเลิก</button></div>
   <div id="cfm" class="scr ov hidden" style="background:rgba(3,4,14,.7)"><div class="dlg" id="cfmt"></div><div class="btnrow"><button class="btn" style="background:#c33" id="cfm_y">ลบสกิล</button><button class="btn g" id="cfm_n">ไม่ลบ</button></div></div>
   <div id="over" class="scr ov hidden"><h1 id="ovt">จบเกม</h1><div class="rs" id="ovb"></div><button class="btn" id="back">กลับเมนู</button></div>
@@ -706,21 +716,27 @@ function spawnBoss(){const e=spawnAt('boss');G.banner={txt:'⚠ '+e.name+' ⚠',
 function waveStart(){G.banner={txt:'เวฟ '+G.wave,t:2.2};spawnBurst();if(G.wave%BOSS_EVERY===0)spawnBoss();sfx(260,.3,'triangle',.06,200,'wv2')}
 function spawnChest(tier,x,y){CH.push({x,y,tier,t:Math.random()*6,life:CHEST_LIFE,id:++UID})}
 
-/* ---- เปิดกล่อง: สุ่มสกิลที่มีอยู่ (เลเวล+1 หรือวิวัฒนาการ) ---- */
+/* ---- เปิดกล่อง: จำนวนวงล้อ = ระดับสีกล่อง (ขาว1 ... แดง5) สุ่มพร้อมกัน แล้วเลือกรับ 1 อัน ---- */
+const EVO_W=[.6,.8,1,1.3,1.8];
 function openChest(c){
   CH.splice(CH.indexOf(c),1);G.chestN++;
   const t=c.tier,gold=Math.round(CHEST_GOLD[t-1]*(1+G.wave*.04)*p.greed);
   let pool=[];
-  for(const i of p.wp){if(i.evo)continue;pool.push({k:i.lvl<W[i.id].max?'lvl':'evo',inst:i,w:1})}
-  if(!pool.length)pool=[{k:'gold',m:1,w:4},{k:'gold',m:1.5,w:3},{k:'gold',m:2.5,w:2},{k:'gold',m:4,w:1},{k:'heal',w:2.5}];
-  const strip=[];for(let k=0;k<64;k++)strip.push(wpick(pool,pool.map(o=>o.w)));
-  const win=strip[52];
-  G.chest={tier:t,gold,strip,win,only:pool[0].k==='gold'||pool[0].k==='heal'};
+  for(const i of p.wp){if(i.evo)continue;pool.push(i.lvl<W[i.id].max?{k:'lvl',inst:i,w:1}:{k:'evo',inst:i,w:EVO_W[t-1]})}
+  const only=!pool.length;
+  if(only)pool=[{k:'gold',m:1,w:4},{k:'gold',m:1.5,w:3},{k:'gold',m:2.5,w:2},{k:'gold',m:4,w:1},{k:'heal',w:2.5}];
+  const reels=[];
+  for(let n=0;n<t;n++){
+    const strip=[];for(let k=0;k<64;k++)strip.push(wpick(pool,pool.map(o=>o.w)));
+    const stop=50+Math.floor(Math.random()*4);
+    reels.push({strip,stop,win:strip[stop]});
+  }
+  G.chest={tier:t,gold,reels,only};
   G.state='chest';K.l=K.r=K.j=0;resetPad();vibe(60);sfx(900,.4,'triangle',.07,900,'chop');
   showChest();
 }
-function chestApply(){
-  const c=G.chest,r=c.win;G.gold+=c.gold;
+function chestApply(i){
+  const c=G.chest,r=c.reels[i||0].win;G.gold+=c.gold;
   if(r.k==='lvl')r.inst.lvl++;
   else if(r.k==='evo'){r.inst.evo=true;p.hp=Math.min(p.maxhp,p.hp+p.maxhp*.3)}
   else if(r.k==='gold')G.gold+=Math.round(c.gold*r.m);
@@ -1197,35 +1213,40 @@ function tileHtml(o){
   if(o.k==='gold')return `<div class="tl" style="--c:#ffd23f"><div class="ti">💰</div><div class="tn">เหรียญโบนัส</div><div class="tv">×${o.m}</div></div>`;
   return `<div class="tl" style="--c:#4de08a"><div class="ti">🍗</div><div class="tn">ฟื้นเลือดเต็ม</div><div class="tv">100%</div></div>`;
 }
+const RH=[148,120,98,80,66],CWIN=700;
 function showChest(){
-  const c_=G.chest,T=TIER[c_.tier-1];
-  $('cs_t').textContent='📦 กล่อง'+T.n;$('cs_t').style.color=T.c;
-  $('cs_s').textContent=c_.only?'สกิลเต็ม/วิวัฒนาการครบแล้ว — สุ่มรางวัลพิเศษแทน':'สุ่มสกิลที่คุณมี';
-  $('cs_strip').innerHTML=c_.strip.map(tileHtml).join('');
-  $('cs_strip').style.transform='translateX(0)';
-  $('cs_res').innerHTML='';$('cs_ok').classList.add('hidden');
-  cs={t:0,dur:5.2,off:52*TW+TW/2-380+rnd(-.3,.3)*TW,done:false,last:-1};
+  const c_=G.chest,T=TIER[c_.tier-1],n=c_.reels.length,rh=RH[n-1];
+  $('cs_t').textContent='📦 กล่อง'+T.n+' · '+n+' วงล้อ';$('cs_t').style.color=T.c;
+  $('cs_s').textContent=c_.only?'สกิลเต็ม/วิวัฒนาการครบแล้ว — สุ่มรางวัลพิเศษแทน':'สุ่มสกิลที่คุณมี แล้วเลือกรับ 1 อัน';
+  $('cs_s').classList.toggle('hidden',n>=4);
+  const R=$('cs_reels');R.className='s'+n;R.style.setProperty('--rh',rh+'px');
+  R.innerHTML=c_.reels.map((r,k)=>`<div class="cr"><div class="cwin" style="border-color:${T.c}"><div class="cstrip" id="cst${k}">${r.strip.map(tileHtml).join('')}</div><div class="cmark"></div></div><button class="cpick hidden" data-k="${k}">เลือก</button></div>`).join('');
+  $('cs_res').innerHTML='';
+  cs={t:0,rows:c_.reels.map((r,k)=>({dur:4.4+k*.5,off:r.stop*TW+TW/2-CWIN/2+rnd(-.3,.3)*TW,done:false,last:-1})),done:false};
   $('chest').classList.remove('hidden');
 }
 function chestAnim(dt){
   if(!cs||cs.done)return;
-  cs.t+=dt;const k=Math.min(1,cs.t/cs.dur),e=1-Math.pow(1-k,4),pos=cs.off*e;
-  $('cs_strip').style.transform=`translateX(${-pos}px)`;
-  const idx=Math.floor((pos+380)/TW);if(idx!==cs.last){cs.last=idx;sfx(500+(idx%5)*50,.03,'square',.03,0,'tick')}
-  if(k>=1){
-    cs.done=true;const r=G.chest.win,c_=G.chest;
-    $('cs_strip').children[52].classList.add('win');
-    let h;
-    if(r.k==='lvl'){const d=W[r.inst.id];h=`${d.icon} <b>${d.name}</b> Lv.${r.inst.lvl} → <b>Lv.${r.inst.lvl+1}</b>${r.inst.lvl+1>=d.max?' (MAX!)':''}`}
-    else if(r.k==='evo'){const d=W[r.inst.id];h=`✨ <b>วิวัฒนาการ!</b> ${d.name} → <b>${d.evo.icon} ${d.evo.name}</b><br><small>${d.evo.desc}</small>`}
-    else if(r.k==='gold')h=`💰 โชคดี! ได้เหรียญโบนัสเพิ่ม <b>+${Math.round(c_.gold*r.m)}</b>`;
-    else h='🍗 ฟื้นเลือดเต็มหลอด!';
-    $('cs_res').innerHTML=h+`<br><span class="gl">💰 ได้รับเหรียญ +${c_.gold}</span>`;
-    $('cs_ok').classList.remove('hidden');sfx(900,.4,'triangle',.07,900,'chw');vibe(40);
+  cs.t+=dt;let all=true;
+  cs.rows.forEach((w,k)=>{
+    if(w.done)return;
+    const q=Math.min(1,cs.t/w.dur),e=1-Math.pow(1-q,4),pos=w.off*e,el=$('cst'+k);
+    if(el)el.style.transform=`translateX(${-pos}px)`;
+    const idx=Math.floor((pos+CWIN/2)/TW);if(k===0&&idx!==w.last){w.last=idx;sfx(500+(idx%5)*50,.03,'square',.03,0,'tick')}
+    if(q>=1){w.done=true;if(el&&el.children[G.chest.reels[k].stop])el.children[G.chest.reels[k].stop].classList.add('win')}else all=false;
+  });
+  if(all){
+    cs.done=true;
+    document.querySelectorAll('.cpick').forEach(b=>b.classList.remove('hidden'));
+    $('cs_res').innerHTML=`แตะ <b>เลือก</b> เพื่อรับ 1 รางวัลจาก ${G.chest.reels.length} วงล้อ<br><span class="gl">💰 ได้รับเหรียญ +${G.chest.gold} แน่นอน</span>`;
+    sfx(900,.4,'triangle',.07,900,'chw');vibe(40);
   }
 }
-$('cs_win').addEventListener('pointerdown',()=>{if(cs&&!cs.done)cs.t=cs.dur});
-$('cs_ok').onclick=()=>{if(!cs||!cs.done)return;chestApply();cs=null;$('chest').classList.add('hidden')};
+$('cs_reels').addEventListener('pointerdown',e=>{
+  const b=e.target.closest('.cpick');
+  if(b){if(!cs||!cs.done)return;const k=+b.dataset.k;chestApply(k);cs=null;$('chest').classList.add('hidden');return}
+  if(cs&&!cs.done)cs.t=99;
+});
 
 /* ================= ลบสกิล ================= */
 let delId=null;
