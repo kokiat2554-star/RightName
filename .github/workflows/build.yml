@@ -44,6 +44,7 @@ jobs:
           cat > $D/AndroidManifest.xml <<'EOF'
           <?xml version="1.0" encoding="utf-8"?>
           <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+              <uses-permission android:name="android.permission.VIBRATE"/>
               <application android:label="นักล่าราตรี" android:hardwareAccelerated="true"
                   android:theme="@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen">
                   <activity android:name=".MainActivity" android:exported="true"
@@ -65,11 +66,16 @@ jobs:
           import android.os.Bundle;
           import android.view.View;
           import android.view.WindowManager;
+          import android.webkit.JavascriptInterface;
           import android.webkit.WebSettings;
           import android.webkit.WebView;
           import android.webkit.WebViewClient;
           public class MainActivity extends Activity {
               private WebView web;
+              public class Bridge {
+                  @JavascriptInterface public void exit() { runOnUiThread(new Runnable() { public void run() { finish(); } }); }
+                  @JavascriptInterface public void vibrate(final int ms) { try { android.os.Vibrator v = (android.os.Vibrator) getSystemService(VIBRATOR_SERVICE); if (v == null) return; if (Build.VERSION.SDK_INT >= 26) v.vibrate(android.os.VibrationEffect.createOneShot(ms, android.os.VibrationEffect.DEFAULT_AMPLITUDE)); else v.vibrate(ms); } catch (Exception e) {} }
+              }
               @Override protected void onCreate(Bundle b) {
                   super.onCreate(b);
                   getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -85,6 +91,7 @@ jobs:
                   s.setDomStorageEnabled(true);
                   s.setMediaPlaybackRequiresUserGesture(false);
                   s.setAllowFileAccess(true);
+                  web.addJavascriptInterface(new Bridge(), "AndroidApp");
                   web.setWebViewClient(new WebViewClient());
                   setContentView(web);
                   web.loadUrl("file:///android_asset/index.html");
@@ -96,7 +103,7 @@ jobs:
               @Override public void onWindowFocusChanged(boolean f) { super.onWindowFocusChanged(f); if (f) hideBars(); }
               @Override protected void onPause() { super.onPause(); web.onPause(); }
               @Override protected void onResume() { super.onResume(); web.onResume(); }
-              @Override public void onBackPressed() { web.evaluateJavascript("togglePause()", null); }
+              @Override public void onBackPressed() { web.evaluateJavascript("window.onBack&&window.onBack()", null); }
           }
           EOF
       - name: Build
