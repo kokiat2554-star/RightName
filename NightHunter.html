@@ -838,7 +838,7 @@ function mkEnemy(type,x,y,mut){
   const d=EN[type],w=G.wave;
   const hpM=(1+.13*(w-1)+.0065*(w-1)*(w-1))*(d.boss?bossMul(w):hardHp(w)),dmgM=(1+.05*(w-1))*hardDmg(w),spdM=Math.min(1.5,1+.012*(w-1));
   const e={type,x,y,vx:0,vy:0,r:d.r,hp:d.hp*hpM,spd:d.spd*spdM*rnd(.9,1.1),dmg:d.dmg*dmgM,xp:d.xp*(1+.08*(w-1)),kind:d.kind,boss:!!d.boss,ghost:d.ghost,slow:0,flash:0,kx:0,t:rnd(0,6),jcd:rnd(0,2),hc:{},on:false,dead:false,charge:0,cdT:rnd(2,4),face:1,drop:0,mut:null,sc:1,jv:null,node:null,rb:!!d.rb,sh:d.shield?Math.max(1,Math.floor(w/10)):0,born:G.time,rage:0};
-  if(mut){e.mut=mut;e.hp*=4;e.dmg*=1.5;e.xp*=3;e.r*=1.3;e.sc=1.3}
+  if(mut){e.mut=mut;{const k_=Math.min(1,(w-1)/19);e.hp*=1.8+2.2*k_;e.dmg*=1.25+.25*k_}e.xp*=3;e.r*=1.3;e.sc=1.3}
   if(d.boss){const idx=Math.max(0,Math.round(w/5)-1);e.name=BOSS_NAMES[idx%20]+(w>100?' Ω':'');e.bc='hsl('+((idx*47+350)%360)+',55%,30%)';e.tier=tierOfWave(w)}
   e.max=e.hp;E.push(e);return e;
 }
