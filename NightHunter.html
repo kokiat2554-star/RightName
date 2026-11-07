@@ -479,7 +479,7 @@ const PRE=[
  {k:'rr',i:'🎲',n:'สุ่มการ์ดฟรี 3 ครั้ง',d:'สุ่มการ์ดใหม่ได้ฟรี 3 ครั้งแรกในด่าน',cost:30000},
  {k:'rev',i:'👼',n:'ชุบชีวิตฟรี +1',d:'ได้ชุบชีวิตฟรี 1 ครั้งในด่าน (ไม่เสียเหรียญ)',cost:80000}];
 const metaCost=(m,l)=>{let c=m.base;for(let k=1;k<=l;k++)c*=2+k;return Math.round(c/10)*10};
-const CFG={goldEarly:1,blockFrom:15,xpMul:3,hardA:.35,hardB:.0015,hardStart:19,dmgA:.025,dmgB:.0003,bossRage:90,pickLife:20,gemLife:60,chestMax:5,rerollBase:20000,reviveCost:30000};
+const CFG={mobMul:.3,goldEarly:1,blockFrom:15,xpMul:3,hardA:.35,hardB:.0015,hardStart:19,dmgA:.025,dmgB:.0003,bossRage:90,pickLife:20,gemLife:60,chestMax:5,rerollBase:20000,reviveCost:30000};
 const hardHp=w=>w<=CFG.hardStart?1:1+CFG.hardA*(w-CFG.hardStart)+CFG.hardB*(w-CFG.hardStart)**2;
 const hardDmg=w=>w<=CFG.hardStart?1:1+CFG.dmgA*(w-CFG.hardStart)+CFG.dmgB*(w-CFG.hardStart)**2;
 const bossMul=w=>w<20?.8+Math.max(0,w-5)*.04+Math.pow(Math.max(0,w-5)/15,3)*8.4:10*(1+(w-20)/100);
@@ -533,10 +533,11 @@ function hurt(e,dmg,o={}){
   if(e.sh>0){e.sh--;e.flash=.12;txt(e.x,e.y-e.r,'🛡','#8fd0ff');sfx(520,.07,'triangle',.04,200,'shd');part(e.x,e.y-e.r*.5,6,'#8fd0ff',140,.3,2);return}
   const crit=!o.nc&&Math.random()<p.crit;if(crit)dmg*=2;
   e.hp-=dmg;e.flash=.09;G.dmgOut+=dmg;const sid=o.src||curSrc;if(sid)G.bySrc[sid]=(G.bySrc[sid]||0)+dmg;
-  if(o.kb&&!e.boss&&!e.mut&&e.kind!=='fly'&&!(e.sh>0))e.kx=clamp(e.kx+o.kb,-260,260);
+  const ccf=(e.boss||e.sh>0)?0:(e.mut||e.kind==='fly')?.5:1;
+  if(o.kb&&ccf>0)e.kx=clamp(e.kx+o.kb*ccf,-260,260);
   if(o.slow)e.slow=Math.max(e.slow,o.slow);
   if(o.dot){e.dots=e.dots||{};e.dots[o.dot.k]={t:o.dot.t,dps:dmg*o.dot.f,col:o.dot.col,src:sid,acc:0}}
-  if(o.up&&!e.boss&&e.kind!=='fly'&&e.sh<=0)e.up=Math.max(e.up||0,e.mut?o.up*.4:o.up);
+  if(o.up&&ccf>0)e.up=Math.max(e.up||0,o.up*ccf);
   if(p.ls>0){const h=Math.min(dmg*p.ls*(p.db.poison>0?.2:1),p.lsTok);p.lsTok-=h;p.hp=Math.min(p.maxhp,p.hp+h)}
   txt(e.x,e.y-e.r,Math.round(dmg),crit?'#ffd34d':'#fff');
   sfx(170,.05,'square',.025,0,'hit');
@@ -581,7 +582,7 @@ function beamHit(i,s,x0,y0,x1,y1,w,an,cd){
   const L=E.filter(e=>!e.dead&&distSeg(e.x,e.y,x0,y0,x1,y1)<e.r+w);
   L.sort((a,b)=>Math.hypot(a.x-x0,a.y-y0)-Math.hypot(b.x-x0,b.y-y0));
   for(const e of L){
-    const blk=(e.boss&&G.wave>=CFG.blockFrom)||e.sh>0;
+    const blk=e.boss&&G.wave>=CFG.blockFrom;
     if(canHit(e,'b'+i.n+'_'+Math.floor(G.time/cd),cd))hurt(e,s.dmg,{kb:Math.cos(an)*80});
     if(blk)break;
   }
@@ -831,13 +832,13 @@ function endRun(){
 
 /* ================= สร้างศัตรู / กล่อง ================= */
 function pickType(){
-  const w=G.wave,t=[['zombie',10],['bat',w>=2?7:0],['skeleton',w>=3?6:0],['guard',w>=4?5:0],['slime',w>=5?5:0],['caster',w>=6?Math.min(7,(w-4)*.7):0],['ghost',w>=8?4:0],['brute',w>=12?Math.min(12,(w-10)*.8):0]];
+  const w=G.wave,t=[['zombie',10],['bat',w>=2?7:0],['skeleton',w>=3?6:0],['guard',w>=4?5:0],['slime',w>=5?5:0],['caster',w>=6?Math.min(3.6,(w-4)*.35):0],['ghost',w>=8?4:0],['brute',w>=12?Math.min(12,(w-10)*.8):0]];
   return wpick(t.map(a=>a[0]),t.map(a=>a[1]));
 }
 function mkEnemy(type,x,y,mut){
   const d=EN[type],w=G.wave;
   const hpM=(1+.13*(w-1)+.0065*(w-1)*(w-1))*(d.boss?bossMul(w):hardHp(w)),dmgM=(1+.05*(w-1))*hardDmg(w),spdM=Math.min(1.5,1+.012*(w-1));
-  const e={type,x,y,vx:0,vy:0,r:d.r,hp:d.hp*hpM*(d.boss||w>=15?1:.6+.4*(w-1)/14),spd:d.spd*spdM*rnd(.9,1.1),dmg:d.dmg*dmgM*(d.boss||w>=15?1:.6+.4*(w-1)/14)*(d.boss&&w<20?.5+.5*Math.max(0,w-10)/10:1),xp:d.xp*(1+.08*(w-1))*(w<=15?1.6:w<25?1.6-.06*(w-15):1),kind:d.kind,boss:!!d.boss,ghost:d.ghost,slow:0,flash:0,kx:0,t:rnd(0,6),jcd:rnd(0,2),hc:{},on:false,dead:false,charge:0,cdT:rnd(2,4),face:1,drop:0,mut:null,sc:1,jv:null,node:null,rb:!!d.rb,sh:d.shield?Math.max(1,Math.floor(w/10)):0,born:G.time,rage:0};
+  const e={type,x,y,vx:0,vy:0,r:d.r,hp:d.hp*CFG.mobMul*hpM*(d.boss||w>=15?1:.6+.4*(w-1)/14),spd:d.spd*spdM*rnd(.9,1.1),dmg:d.dmg*CFG.mobMul*dmgM*(d.boss||w>=15?1:.6+.4*(w-1)/14)*(d.boss&&w<20?.5+.5*Math.max(0,w-10)/10:1),xp:d.xp*(1+.08*(w-1))*(w<=15?1.6:w<25?1.6-.06*(w-15):1),kind:d.kind,boss:!!d.boss,ghost:d.ghost,slow:0,flash:0,kx:0,t:rnd(0,6),jcd:rnd(0,2),hc:{},on:false,dead:false,charge:0,cdT:rnd(2,4),face:1,drop:0,mut:null,sc:1,jv:null,node:null,rb:!!d.rb,sh:d.shield?Math.max(1,Math.floor(w/10)):0,born:G.time,rage:0};
   if(mut){e.mut=mut;{const k_=Math.min(1,(w-1)/19);e.hp*=(1.3+2.7*k_)*(d.ghost&&w<20?.75:1);e.dmg*=(1.1+.4*k_)*(d.ghost&&w<20?.8:1)}e.xp*=3;e.r*=1.3;e.sc=1.3}
   if(d.boss){const idx=Math.max(0,Math.round(w/5)-1);e.name=BOSS_NAMES[idx%20]+(w>100?' Ω':'');e.bc='hsl('+((idx*47+350)%360)+',55%,30%)';e.tier=tierOfWave(w)}
   e.max=e.hp;E.push(e);return e;
@@ -1019,8 +1020,8 @@ function updEnemies(dt){
       const wf=e.y+e.r;
       let mv;
       if(e.kind==='range'){ /* ตีไกล: เว้นระยะ ไม่กระโดด ยิงสวนอย่างเดียว */
-        const ad=Math.abs(dx);mv=ad>(e.boss?400:340)?dir:ad<(e.boss?300:230)?-dir:0;
-        e.cdT-=dt;if(e.cdT<=0&&Math.abs(dx)<(e.boss?760:580))enemyFire(e,dx,pc);
+        const ad=Math.abs(dx);mv=ad>(e.boss?320:210)?dir:ad<(e.boss?220:130)?-dir:0;
+        e.cdT-=dt;if(e.cdT<=0&&Math.abs(dx)<(e.boss?480:340))enemyFire(e,dx,pc);
       }else mv=enemyWalk(e,wf,dt,sm);
       let vx=mv*e.spd*sm;
       if(e.boss&&!e.rb){e.cdT-=dt;if(e.cdT<=0){e.charge=.9;e.cdT=rnd(4,6)}if(e.charge>0){e.charge-=dt;vx*=2}}
@@ -1096,7 +1097,7 @@ function updProj(dt){
         for(const e of hits){const dx=e.x-q.x;
           if(q.expl){aoe(q.x,q.y,q.expl,q.dmg,{slow:q.slow,col:q.col,fx:q.fx});q.exploded=1;q.life=0;break}
           if(!canHit(e,q.uid,q.hitCd))continue;
-          const blk=!q.follow&&!q.gb&&((e.boss&&G.wave>=CFG.blockFrom)||e.sh>0);
+          const blk=!q.follow&&!q.gb&&e.boss&&G.wave>=CFG.blockFrom;
           hurt(e,q.dmg,{kb:Math.sign(q.vx||dx)*(q.kb===undefined?70:q.kb),slow:q.slow,dot:q.dot,up:q.up});
           if(blk){if(q.boom!==undefined)q.age=Math.max(q.age,q.boom+.001);else q.life=0;break}
           if(q.pierce--<=0){q.life=0;break}
