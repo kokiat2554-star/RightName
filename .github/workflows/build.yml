@@ -61,7 +61,7 @@ jobs:
           EOF
           # ชื่อแอพ: อ่านจากไฟล์ appname.txt (ถ้ามี) ไม่งั้นใช้ชื่อเดิม
           if [ -f appname.txt ]; then NAME=$(head -n1 appname.txt | tr -d '\r"&<>/\\'); fi
-          [ -z "$NAME" ] && NAME="นักล่าราตรี"
+          [ -z "$NAME" ] && NAME="Never Nigh End"
           sed -i "s|android:label=\"นักล่าราตรี\"|android:label=\"$NAME\"|" $D/AndroidManifest.xml
           echo "APPNAME=$NAME" >> $GITHUB_ENV
           # ไอคอนแอพ: ถ้ามีไฟล์ icon.png ใน repo จะใช้เป็นไอคอน
