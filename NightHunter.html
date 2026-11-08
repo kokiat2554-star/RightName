@@ -886,7 +886,7 @@ const xpNeed=l=>Math.round((1.3+(CFG.xpMul-1.3)*Math.min(1,(l-1)/30))*(5+(l-1)*7
 function startRun(){swOpt=null;$('swp').classList.add('hidden');
   audio();
   const ch=CHARS[S.sel];
-  p={char:S.sel,x:WORLD/2,y:GROUND,fl:GROUND,node:NODES[0],vx:0,vy:0,w:22,h:40,face:1,on:true,coy:0,jb:0,jh:0,inv:0,wp:[{id:ch.base,lvl:1,t:.3,n:++UID,evo:false}],rev:S.up.rev||0,flash:0,walk:0,lsTok:5,db:{fire:0,ice:0,poison:0}};
+  p={char:S.sel,x:WORLD/2,y:GROUND,fl:GROUND,node:NODES[0],vx:0,vy:0,w:22,h:40,face:1,on:true,coy:0,jb:0,jh:0,inv:0,gr:0,grSet:new Set(),wp:[{id:ch.base,lvl:1,t:.3,n:++UID,evo:false}],rev:S.up.rev||0,flash:0,walk:0,lsTok:5,db:{fire:0,ice:0,poison:0}};
   recalc(true);p.lsTok=p.maxhp*.05;
   E=[];P=[];EP=[];GEM=[];COIN=[];HRT=[];CH=[];PART=[];TXT=[];FX=[];TM=[];ACT=[];
   G={state:'play',time:0,wave:1,waveT:0,spawnT:1,kills:0,gold:0,xp:0,lvl:1,need:xpNeed(1),pending:0,pendW:[],folded:false,rerolls:0,freeRr:0,paidRev:0,optsW:1,banner:{txt:'เวฟ 1',t:2.2},opts:[],note:null,
@@ -997,7 +997,7 @@ function updPlayer(dt){
   p.on=groundPhys(p,0,wf);if(p.on){p.jn=0;p.jy0=p.y;p.fl=p.y;p.node=nodeAt(p.x,p.y)||p.node}
   if(p.regen>0&&p.db.poison<=0)p.hp=Math.min(p.maxhp,p.hp+p.regen*dt);
   p.lsTok=Math.min(p.maxhp*.05,p.lsTok+p.maxhp*.03*dt);
-  p.inv-=dt;p.flash-=dt;if(p.cure>0)p.cure-=dt;
+  p.inv-=dt;p.gr-=dt;p.flash-=dt;if(p.cure>0)p.cure-=dt;
   /* ดีบัฟ */
   let dps=0;
   for(const k in p.db){if(p.db[k]>0){p.db[k]-=dt;dps+=k==='fire'?p.maxhp*DOTR.burn:k==='poison'?p.maxhp*DOTR.poison:0}}
@@ -1120,7 +1120,7 @@ function updEnemies(dt){
       if(e.on&&!wasOn){e.jv=null;e.jcd=Math.max(e.jcd,.3)}
     }
     e.kx*=Math.pow(.01,dt);e.x=clamp(e.x,-60,WORLD+60);
-    if(p.inv<=0&&!(e.smk>0&&!e.boss)){const ddx=e.x-p.x,ddy=e.y-pc,rr_=e.r+13;if(ddx*ddx+ddy*ddy<rr_*rr_)hitPlayer(e.dmg,e)}
+    if(p.inv<=0&&!(e.smk>0&&!e.boss)){const ddx=e.x-p.x,ddy=e.y-pc,rr_=e.r+13;if(ddx*ddx+ddy*ddy<rr_*rr_)hitPlayer(e.dmg,e,e)}
   }
   for(let i=0;i<E.length;i++){const a=E[i];if(a.dead||a.boss)continue;
     for(let j=i+1;j<E.length;j++){const b=E[j];if(b.dead||b.boss)continue;const dx=b.x-a.x;if(dx>14||dx<-14)continue;const dy=b.y-a.y;if(dy>14||dy<-14)continue;
@@ -1129,7 +1129,7 @@ function updEnemies(dt){
   /* กระสุนศัตรู (ลอยช้าๆ หลบได้) */
   const pc2=p.y-22;
   for(const q of EP){q.t+=dt;q.life-=dt;q.x+=q.vx*dt;q.y+=q.vy*dt;
-    if(p.inv<=0){const dx=q.x-p.x,dy=q.y-pc2;if(dx*dx+dy*dy<(q.r+12)**2){q.life=0;hitPlayer(q.dmg,null)}}
+    if(p.inv<=0){const dx=q.x-p.x,dy=q.y-pc2;if(dx*dx+dy*dy<(q.r+12)**2){q.life=0;hitPlayer(q.dmg,null,q)}}
     if(q.x<-80||q.x>WORLD+80||q.y<-80||q.y>VH+80)q.life=0}
   EP=EP.filter(q=>q.life>0);
 }
@@ -1147,11 +1147,19 @@ function paidRevive(){
   G.gold-=CFG.reviveCost;G.paidRev=1;$('rvd').classList.add('hidden');G.state='play';
   p.hp=p.maxhp*.5;p.inv=2.5;p.db={fire:0,ice:0,poison:0};aoe(p.x,p.y-22,260,9999,{col:'#fff6a0',shake:10});G.banner={txt:'👼 ชุบชีวิต!',t:2};sfx(600,.5,'sine',.07,600,'rv');
 }
-function hitPlayer(d,e){
-  const dmg=Math.max(1,Math.round(d-p.armorV));
-  p.hp-=dmg;G.taken+=dmg;p.inv=.7;p.flash=.15;if(S.shake)cam.shake=Math.max(cam.shake,5);vibe(30);
-  txt(p.x,p.y-50,'-'+dmg,'#ff5a5a');part(p.x,p.y-22,8,'#ff4d4d',200,.4);sfx(120,.2,'sawtooth',.06,-60,'pl');
-  if(e&&e.mut)addDebuff(e.mut);
+function hitPlayer(d,e,src){
+  let dmg=Math.max(1,Math.round(d-p.armorV));
+  src=src||e||{};
+  if(p.gr>0){
+    /* ช่วงกระพริบหลังโดนตี: ไม่อมตะ แต่ลดดาเมจ 95% และแต่ละแหล่งโจมตีโดนได้ครั้งเดียวต่อช่วง */
+    if(p.grSet.has(src))return;p.grSet.add(src);
+    dmg*=.05;p.hp-=dmg;G.taken+=dmg;
+    if(dmg>=1)txt(p.x,p.y-50,'-'+Math.round(dmg),'#ff9a9a');
+  }else{
+    p.hp-=dmg;G.taken+=dmg;p.gr=.7;p.grSet=new Set([src]);p.flash=.15;if(S.shake)cam.shake=Math.max(cam.shake,5);vibe(30);
+    txt(p.x,p.y-50,'-'+dmg,'#ff5a5a');part(p.x,p.y-22,8,'#ff4d4d',200,.4);sfx(120,.2,'sawtooth',.06,-60,'pl');
+    if(e&&e.mut)addDebuff(e.mut);
+  }
   if(p.hp<=0)playerDown();
 }
 let GRID=null;
@@ -1742,7 +1750,7 @@ function render(){
   drawActWorld();
   for(const i of p.wp){const d=W[i.id];if(DRW[d.kind])DRW[d.kind](i,wstats(i))}
   const cu_=p.cure>0;
-  if(!(p.inv>0&&Math.floor(G.time*24)%2)){if(p.flash>0)c.globalAlpha=.6;if(cu_){c.shadowColor='#ffd84a';c.shadowBlur=20+8*Math.sin(G.time*8)}drawHeroCtx(c,p.char,p.x,p.y,p.face,p.walk,Math.abs(p.vx)>30,!p.on);c.shadowBlur=0;c.globalAlpha=1}
+  if(!((p.inv>0||p.gr>0)&&Math.floor(G.time*24)%2)){if(p.flash>0)c.globalAlpha=.6;if(cu_){c.shadowColor='#ffd84a';c.shadowBlur=20+8*Math.sin(G.time*8)}drawHeroCtx(c,p.char,p.x,p.y,p.face,p.walk,Math.abs(p.vx)>30,!p.on);c.shadowBlur=0;c.globalAlpha=1}
   drawBar(p.x-15,p.y+5,30,4,p.hp/p.maxhp,'#e23b4a');
   glowB=S.lite?20:60;for(const q of P)drawProj(q);
   for(const f of FX){const k=Math.max(0,f.t)/f.life;if(f.t<0)continue;
@@ -2162,7 +2170,7 @@ function saveRun(){
 function loadRun(){
   const o=readRunSave();if(!o)return false;
   clearRunSave();audio();
-  p=o.p;p.node=nodeAt(p.x,p.y)||NODES[0];p.hp=Math.max(1,p.hp);p.inv=2.5;
+  p=o.p;p.node=nodeAt(p.x,p.y)||NODES[0];p.hp=Math.max(1,p.hp);p.inv=2.5;p.gr=0;p.grSet=new Set();
   E=[];P=[];EP=[];GEM=[];COIN=[];HRT=[];PART=[];TXT=[];FX=[];TM=[];CH=o.CH||[];
   G=Object.assign({state:'play',opts:[],banner:{txt:'เล่นต่อ · เวฟ '+o.G.wave,t:2.2},note:null,bossWarn:false,bossIn:999,bgmT:0},o.G);G.state='play';G.pending=G.pending||0;G.pendW=(G.pendW||[]).slice(0,G.pending);while(G.pendW.length<G.pending)G.pendW.push(G.wave);G.opts=[];G.folded=!!G.folded;G.rerolls=G.rerolls||0;G.freeRr=G.freeRr||0;G.paidRev=G.paidRev||0;bsLast=-1;
   for(const i of p.wp)if(i.n>UID)UID=i.n;UID+=1000;
