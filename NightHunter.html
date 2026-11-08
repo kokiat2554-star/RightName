@@ -250,11 +250,11 @@ const $=id=>document.getElementById(id);
 const rnd=(a,b)=>a+Math.random()*(b-a),clamp=(v,a,b)=>v<a?a:v>b?b:v;
 const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const FONT='"PromptNNE","Noto Sans Thai","Sarabun","Tahoma",sans-serif';
-let SC=1,PR=1;
+let SC=1,PR=1,PRCAP=1.5;
 function resize(){
   const w=innerWidth,h=innerHeight;SC=Math.min(w/VW,h/VH);
   $('stage').style.transform=`translate(${(w-VW*SC)/2}px,${(h-VH*SC)/2}px) scale(${SC})`;
-  PR=Math.min(2.5,(window.devicePixelRatio||1)*SC);cv.width=Math.round(VW*PR);cv.height=Math.round(VH*PR);
+  PR=Math.min(PRCAP,(window.devicePixelRatio||1)*SC);cv.width=Math.round(VW*PR);cv.height=Math.round(VH*PR);
 }
 addEventListener('resize',resize);resize();
 document.addEventListener('contextmenu',e=>e.preventDefault());
@@ -1408,7 +1408,7 @@ function enemySprite(e,f){
   let sp=ESPR.get(key);
   if(!sp){
     if(ESPR.size>1800)ESPR.clear();
-    const half=Math.ceil(r*e.sc*1.95+22),cvs=document.createElement('canvas');cvs.width=cvs.height=Math.ceil(half*2*PR);
+    const half=e.mut?Math.ceil(r*e.sc*1.95+22):Math.ceil(r*e.sc+20),cvs=document.createElement('canvas');cvs.width=cvs.height=Math.ceil(half*2*PR);
     const cx=cvs.getContext('2d'),mainC=c,t0=e.t;
     cx.scale(PR,PR);cx.translate(half,half);c=cx;e.t=fi*st;
     try{enemyBody(e,e.type==='ghost'?f:1,false)}finally{c=mainC;e.t=t0}
@@ -1418,7 +1418,7 @@ function enemySprite(e,f){
 }
 function drawEnemy(e){
   c.save();c.translate(e.x,e.y);const f=e.face||1,r=EN[e.type].r;
-  if(e.boss||e.type==='bat'||e.rage){c.save();enemyBody(e,f,true);c.restore()}
+  if(e.boss||e.rage){c.save();enemyBody(e,f,true);c.restore()}
   else{const sp=enemySprite(e,f);c.save();if(!FLIPLESS[e.type])c.scale(f,1);c.drawImage(sp.cvs,-sp.half,-sp.half,sp.half*2,sp.half*2);c.restore()}
   if(e.sc!==1)c.scale(e.sc,e.sc);
   if(e.type!=='bat'&&e.type!=='ghost')c.scale(f,1);
@@ -1461,10 +1461,21 @@ const DRW={
   drone(i,s){if(!i.dr)return;for(const d of i.dr){c.save();c.translate(d[0],d[1]);c.fillStyle=s.col||'#9ff';c.shadowColor=s.col||'#9ff';c.shadowBlur=10;
     if(s.shape==='sword'){c.rotate(G.time*2);c.beginPath();c.moveTo(0,-12);c.lineTo(4,6);c.lineTo(-4,6);c.fill()}else{c.beginPath();c.moveTo(0,-8);c.lineTo(8,0);c.lineTo(0,8);c.lineTo(-8,0);c.fill()}c.restore()}}
 };
+let SKY=null,SKYPR=0,MOON=null;
+function mkSky(){
+  SKYPR=PR;SKY=document.createElement('canvas');SKY.width=Math.round(VW*PR);SKY.height=Math.round(VH*PR);
+  const x=SKY.getContext('2d');x.scale(PR,PR);
+  const g=x.createLinearGradient(0,0,0,GROUND);g.addColorStop(0,'#090b26');g.addColorStop(.6,'#2a1d4d');g.addColorStop(1,'#6a3463');x.fillStyle=g;x.fillRect(0,0,VW,VH);
+  MOON=document.createElement('canvas');const M=Math.ceil(150*PR);MOON.width=MOON.height=M;
+  const m=MOON.getContext('2d');m.scale(PR,PR);m.translate(75,75);
+  m.fillStyle='#fff4c9';m.shadowColor='#fff4c9';m.shadowBlur=40;m.beginPath();m.arc(0,0,34,0,7);m.fill();m.shadowBlur=0;
+  m.fillStyle='rgba(120,100,140,.35)';m.beginPath();m.arc(-9,-6,8,0,7);m.fill();m.beginPath();m.arc(10,8,5,0,7);m.fill();
+}
 function bgDraw(){
-  const g=c.createLinearGradient(0,0,0,GROUND);g.addColorStop(0,'#090b26');g.addColorStop(.6,'#2a1d4d');g.addColorStop(1,'#6a3463');c.fillStyle=g;c.fillRect(0,0,VW,VH);
+  if(!SKY||SKYPR!==PR)mkSky();
+  c.drawImage(SKY,0,0,VW,VH);
   c.fillStyle='#fff';for(const s of STARS){c.globalAlpha=.4+.6*Math.abs(Math.sin(G.time*.8+s.a*9));c.fillRect((s.x-cam.x*.05+VW*3)%(VW*1.3),s.y,s.s,s.s)}c.globalAlpha=1;
-  const mx=780-cam.x*.08;c.fillStyle='#fff4c9';c.shadowColor='#fff4c9';c.shadowBlur=40;circ(mx,92,34);c.shadowBlur=0;c.fillStyle='rgba(120,100,140,.35)';circ(mx-9,86,8);circ(mx+10,100,5);
+  const mx=780-cam.x*.08;c.drawImage(MOON,mx-75,92-75,150,150);
   const layer=(par,col,base,amp)=>{c.fillStyle=col;c.beginPath();c.moveTo(0,VH);for(let x=0;x<=VW+20;x+=20){const wx=x+cam.x*par;c.lineTo(x,GROUND-base-(Math.sin(wx*.004)*amp+Math.sin(wx*.011)*amp*.5))}c.lineTo(VW+20,VH);c.fill()};
   layer(.2,'#241a4a',90,50);layer(.45,'#1a1338',40,30);
 }
@@ -1644,13 +1655,16 @@ function render(){
 
 /* ================= ลูป ================= */
 let last=0;
-let fpsN=0,fpsT=0,fpsV=0;
+let fpsN=0,fpsT=0,fpsV=0,lowN=0;
 function loop(ts){
   requestAnimationFrame(loop);
-  const dt=Math.min(.033,(ts-last)/1000||0);last=ts;
-  fpsN++;fpsT+=dt;if(fpsT>=.5){fpsV=Math.round(fpsN/fpsT);fpsN=0;fpsT=0}
-  if(G.state==='play'){saveT-=dt;if(saveT<=0){saveT=15;saveRun()}if(saveFlash>0)saveFlash-=dt}
-  if(G.state==='play'){update(dt);if(p&&G.state!=='menu')render()}
+  const raw=Math.min(.25,(ts-last)/1000||0);last=ts;
+  const dt=Math.min(.033,raw);
+  fpsN++;fpsT+=raw;if(fpsT>=.5){fpsV=Math.round(fpsN/fpsT);fpsN=0;fpsT=0;
+    /* ลดความละเอียดภาพอัตโนมัติเมื่อเฟรมตกต่อเนื่อง (ไม่กระทบเกมเพลย์) */
+    if(G.state==='play'&&!G.paused){if(fpsV<46)lowN++;else lowN=0;if(lowN>=3&&PRCAP>1){PRCAP=Math.max(1,PRCAP-.25);lowN=0;resize()}}else lowN=0}
+  if(G.state==='play'){saveT-=raw;if(saveT<=0){saveT=15;saveRun()}if(saveFlash>0)saveFlash-=raw}
+  if(G.state==='play'){let rem=Math.min(raw,.1);do{const st=Math.min(.033,rem);update(st);rem-=st}while(rem>.0005&&G.state==='play');if(p&&G.state!=='menu')render()}
   else if(G.state==='chest'){chestAnim(dt);render()}
   else if(G.state==='levelup'||G.state==='pause'||G.state==='del'||G.state==='over'||G.state==='revive'){render()}
   else if(G.state==='menu'){c.setTransform(PR,0,0,PR,0,0);G.time+=dt;cam.x=0;cam.sx=cam.sy=0;bgDraw();c.save();worldDraw();c.restore()}
