@@ -382,17 +382,18 @@ const STP={
   strike:g=>[D(rr(20,g)),AM(1),AR(12),D(rr(25,g)),AM(1),CD(rr(12,g)),FIN(g,1)],
   drone:g=>[AM(1),D(rr(20,g)),CD(rr(12,g)),AM(1),D(rr(25,g)),PI(1),FIN(g,1)],
   heal:g=>[['ฟื้นเลือด +20%',s=>s.heal*=1.2],CD(rr(12,g)),['ฟื้นเลือด +25%',s=>s.heal*=1.25],CD(rr(12,g)),['ฟื้นเลือด +25%',s=>s.heal*=1.25],CD(rr(12,g)),['ร่างสมบูรณ์: ฟื้นเลือด +40% คูลดาวน์ -10%',s=>{s.heal*=1.4;s.cd*=.9}]],
-  hole:g=>[D(rr(20,g)),AR(12),D(rr(25,g)),CD(rr(12,g)),['ระยะเวลา +0.5 วิ',s=>s.dur+=.5],D(rr(30,g)),['ร่างสมบูรณ์: วง +15% นาน +0.5 วิ ดาเมจ +'+rr(25,g)+'%',s=>{s.area*=1.15;s.dur+=.5;s.dmg*=1+rr(25,g)/100}]],
+  hole:g=>[D(rr(20,g)),AR(12),D(rr(25,g)),['ดึงแรงขึ้น +15%',s=>s.pull*=1.15],['ระยะเวลา +0.5 วิ',s=>s.dur+=.5],D(rr(30,g)),['ร่างสมบูรณ์: วง +15% นาน +0.5 วิ ดาเมจ +'+rr(25,g)+'%',s=>{s.area*=1.15;s.dur+=.5;s.dmg*=1+rr(25,g)/100}]],
   storm:g=>[D(rr(20,g)),AM(1),AR(12),D(rr(25,g)),CD(rr(12,g)),D(rr(25,g)),['ร่างสมบูรณ์: พายุ +1 ลอยนาน 1 วิ ดาเมจ +'+rr(25,g)+'%',s=>{s.amt+=1;s.up=1;s.dmg*=1+rr(25,g)/100}]],
   cloud:g=>[D(rr(20,g)),['เมฆใหญ่ขึ้น ผ่าเพิ่ม +1',s=>{s.cov*=1.25;s.cap+=1}],['เมฆอยู่นานขึ้น +1 วิ',s=>s.dur+=1],D(rr(25,g)),['เมฆใหญ่ขึ้น ผ่าเพิ่ม +2',s=>{s.cov*=1.2;s.cap+=2}],CD(rr(10,g)),['ร่างสมบูรณ์: เมฆเต็มจอ 10 วิ ผ่าเพิ่ม +3',s=>{s.cov=500;s.dur=10;s.cap+=3;s.dmg*=1+rr(20,g)/100}]],
   single:g=>[D(rr(20,g)),AR(15),D(rr(25,g)),AR(15),D(rr(25,g)),CD(rr(12,g)),['ร่างสมบูรณ์: ดาเมจ +'+rr(30,g)+'% ขนาด +20%',s=>{s.dmg*=1+rr(30,g)/100;s.area*=1.2}]],
   beamc:g=>[D(rr(20,g)),AR(15),D(rr(25,g)),['ลำแสงนานขึ้น +0.5 วิ',s=>s.dur+=.5],D(rr(25,g)),CD(rr(12,g)),['ร่างสมบูรณ์: นาน +0.5 วิ ดาเมจ +'+rr(30,g)+'%',s=>{s.dur+=.5;s.dmg*=1+rr(30,g)/100}]],
   fall:g=>[D(rr(20,g)),['ธนู/ดาบ +4',s=>s.amt+=4],AR(12),D(rr(25,g)),CD(rr(12,g)),['ธนู/ดาบ +4',s=>s.amt+=4],['ร่างสมบูรณ์: จำนวน +6 ดาเมจ +'+rr(25,g)+'%',s=>{s.amt+=6;s.dmg*=1+rr(25,g)/100}]],
-  circ:g=>[D(rr(20,g)),['ดาบถี่ขึ้น +1/วิ',s=>s.rate+=1],AR(10),D(rr(25,g)),['วงเวทอยู่นานขึ้น +0.5 วิ',s=>s.dur+=.5],CD(rr(12,g)),['ร่างสมบูรณ์: ดาบ +1/วิ ดาเมจ +'+rr(25,g)+'%',s=>{s.rate+=1;s.dmg*=1+rr(25,g)/100}]],
+  circ:g=>[D(rr(20,g)),['ดาบถี่ขึ้น +4/วิ',s=>s.rate+=4],AR(10),D(rr(25,g)),['วงเวทอยู่นานขึ้น +0.5 วิ',s=>s.dur+=.5],CD(rr(12,g)),['ร่างสมบูรณ์: ดาบ +4/วิ ดาเมจ +'+rr(25,g)+'%',s=>{s.rate+=4;s.dmg*=1+rr(25,g)/100}]],
   nuke:g=>[D(15),CD(8),D(15),CD(8),D(15),CD(8),['ร่างสมบูรณ์: ดาเมจ +20%',s=>s.dmg*=1.2]],
   blz:g=>[D(rr(25,g)),['พายุนานขึ้น +0.5 วิ',s=>s.dur+=.5],D(rr(25,g)),CD(rr(10,g)),['พายุนานขึ้น +0.5 วิ',s=>s.dur+=.5],D(rr(25,g)),['ร่างสมบูรณ์: นาน +1 วิ ดาเมจ +'+rr(30,g)+'%',s=>{s.dur+=1;s.dmg*=1+rr(30,g)/100}]],
   smoke:g=>[D(rr(20,g)),AR(12),D(rr(25,g)),['ควันนานขึ้น +0.5 วิ',s=>s.dur+=.5],AR(12),D(rr(30,g)),['ร่างสมบูรณ์: นาน +1 วิ วง +15% ดาเมจ +'+rr(25,g)+'%',s=>{s.dur+=1;s.area*=1.15;s.dmg*=1+rr(25,g)/100}]],
-  gaxe:g=>[D(rr(20,g)),AR(12),D(rr(25,g)),CD(rr(12,g)),AR(12),D(rr(25,g)),['ร่างสมบูรณ์: ขนาด +15% ดาเมจ +'+rr(30,g)+'%',s=>{s.area*=1.15;s.dmg*=1+rr(30,g)/100}]],
+  dbr:g=>[D(rr(20,g)),AR(12),D(rr(25,g)),CD(rr(12,g)),AR(12),D(rr(25,g)),['ร่างสมบูรณ์: ไฟกว้าง +15% ดาเมจ +'+rr(30,g)+'%',s=>{s.area*=1.15;s.dmg*=1+rr(30,g)/100}]],
+  gaxe:g=>[D(rr(20,g)),AR(12),D(rr(25,g)),CD(rr(12,g)),AR(12),D(rr(25,g)),['ร่างสมบูรณ์: ระยะ +15% ดาเมจ +'+rr(30,g)+'%',s=>{s.area*=1.15;s.dmg*=1+rr(30,g)/100}]],
   pulse:g=>[D(rr(15,g)),AR(8),D(rr(15,g)),CD(rr(8,g)),AR(8),D(rr(15,g)),['ร่างสมบูรณ์: ดาเมจ +20%',s=>s.dmg*=1.2]]
 };
 const W={};
@@ -404,14 +405,14 @@ def('a_arrow',{own:'archer',name:'ยิงธนู',icon:'🏹',kind:'volley',
 def('a_rain',{own:'archer',sig:1,name:'ฝนธนู',icon:'🌧️',kind:'arrowfall',st:'fall',desc:'ยิงธนูขึ้นฟ้าพ้นจอ แล้วร่วงลงมาจุดเดียวหลายดอก (เน้นกลุ่มศัตรูที่แน่น)',base:{dmg:11,cd:5.5,amt:14,W:75,pierce:1,dur:1.4,col:'#ffe08a'}});
 def('m_fire',{own:'mage',name:'ลูกไฟ',icon:'🔥',kind:'volley',st:'proj',desc:'ลูกเวทม่วงตามติดศัตรูแล้วระเบิดเป็นวง ทำให้ศัตรูช้าลง',base:{dmg:18,cd:1.5,amt:1,v:250,r:11,expl:72,home:1,life:2.6,shape:'orb',col:'#b58bff',slow:1.2,range:750,stag:.12,rnd:.12}});
 def('m_ice',{own:'mage',sig:1,name:'พายุน้ำแข็ง',icon:'❄️',kind:'blizzard',st:'blz',noAmt:1,unit:'sec',desc:'พายุหิมะถล่มทั้งจอ ดาเมจเบามาก เน้นทำให้ศัตรูช้าลงตลอดช่วงพายุ',base:{dmg:8,cd:12,dur:4}});
-def('n_star',{own:'ninja',name:'ชูริเคน',icon:'⭐',kind:'volley',st:'proj',desc:'ขว้างชูริเคนกระจายเป็นแฉก ทำให้ศัตรูเลือดไหล (ดาเมจต่อเนื่อง 3 วิ)',base:{dmg:9,cd:1.1,amt:3,sp:.22,v:700,r:10,pierce:1,life:1,shape:'star',vr:18,col:'#e8e8ff',range:650,dot:{k:'bleed',t:3,f:.4,col:'#e03050'}}});
+def('n_star',{own:'ninja',name:'ชูริเคน',icon:'⭐',kind:'volley',st:'proj',desc:'ขว้างชูริเคนกระจายเป็นแฉก ทำให้ศัตรูเลือดไหล (ดาเมจต่อเนื่อง 3 วิ)',base:{dmg:9,cd:1.1,amt:3,sp:.22,v:700,r:10,pierce:1,life:1,shape:'star',vr:18,col:'#e8e8ff',range:650,dot:{k:'bleed',t:4,col:'#e03050'}}});
 def('n_bomb',{own:'ninja',sig:1,name:'ระเบิดควัน',icon:'💣',kind:'smoke',st:'smoke',noAmt:1,unit:'sec',desc:'วางควันฟุ้งวงกว้าง มอนระยะประชิด (ไม่รวมบอส) ที่อยู่ในควันจะตีผู้เล่นไม่โดน และได้รับดาเมจต่อวินาที (บอสและมอนยิงไกลยังโจมตีได้)',base:{dmg:22,cd:10,dur:5,R:110}});
 def('g_gun',{own:'gunner',name:'ยิงรัว',icon:'🔫',kind:'volley',st:'proj',desc:'ยิงกระสุนรัวเป็นชุดใส่ศัตรูที่ใกล้ที่สุด',base:{dmg:7,cd:.9,amt:3,v:860,r:5,pierce:0,life:.9,shape:'bullet',col:'#ffe27a',range:650,rnd:.06,stag:.07,face:1}});
 def('g_rocket',{own:'gunner',sig:1,name:'จรวด',icon:'🚀',kind:'volley',st:'proj',desc:'ยิงจรวดพุ่งเป็นเส้นตรง ไม่ล็อคเป้า ชนแล้วระเบิดวงกว้าง',base:{dmg:42,cd:3.4,amt:1,v:520,r:9,expl:98,home:0,acc:300,life:1.6,shape:'rocket',col:'#ff6a3a',range:800,stag:.2,rnd:.04,kb:200}});
 /* --- เทียร์ 1 คอมมอน (ขาว) อ่อนสุด --- */
 def('orbit_w',{tier:1,name:'ใบมีดโคจร',icon:'🌀',kind:'orbit',st:'orbit',desc:'ใบมีดหมุนวนรอบตัวช่วงหนึ่ง แล้วหายไปพักก่อนกลับมาใหม่ ยิ่งอัพยิ่งเพิ่มจำนวนใบมีด',base:{dmg:6.5,cd:.5,amt:2,R:76,spin:3.2,size:14,on:4,off:3,col:'#bfe9ff'}});
 def('knife',{tier:1,name:'มีดบิน',icon:'🗡️',kind:'volley',st:'proj',desc:'ปามีดเร็วๆ ใส่ศัตรูที่ใกล้ที่สุด',base:{dmg:8.8,cd:1.0,amt:2,v:900,r:6,pierce:0,life:.8,shape:'knife',col:'#e8e8ff',range:600,sp:.1,face:1}});
-def('axe',{tier:1,name:'ขวานยักษ์',icon:'🪓',kind:'giantaxe',st:'gaxe',noAmt:1,desc:'เสกขวานยักษ์เหนือหัว แล้วฟาดลงใส่กลุ่มศัตรูที่ใกล้ที่สุดอย่างช้าๆ ดาเมจวงกว้าง ทำให้เลือดไหล (บอสและมอนที่กันสถานะไม่ติด)',base:{dmg:60,cd:3.2,amt:1,R:105}});
+def('axe',{tier:1,name:'ดาบยักษ์',icon:'🗡️',kind:'giantsword',st:'gaxe',noAmt:1,desc:'เสกดาบยักษ์เหนือหัว แล้วสับลงไปทางที่ฮีโร่หันหน้า ดาเมจวงกว้างครั้งเดียวต่อการใช้ ทำให้เลือดไหล (บอสและมอนที่กันสถานะไม่ติด) · ดาบเคลื่อนที่ตามฮีโร่ · อัปเลเวลได้แค่ ดาเมจ / ลดคูลดาวน์ / ระยะ',base:{dmg:60,cd:3.2,amt:1,R:125,dot:{k:'bleed',t:4,col:'#ff4a5a'}}});
 def('aura_w',{tier:1,name:'ออร่าศักดิ์สิทธิ์',icon:'✨',kind:'heal',st:'heal',noAmt:1,unit:'heal',desc:'ฟื้นเลือดมหาศาลแบบค่อยๆ เพิ่ม 2 วิ ระหว่างนั้นมีออร่าทองและป้องกัน CC ทุกชนิด',base:{dmg:1,heal:15.2,dur:2,cd:8.5}});
 def('spark',{tier:1,name:'ประกายไฟ',icon:'🎇',kind:'volley',st:'proj',desc:'พ่นไฟเป็นแฉกสั้นๆ ไปข้างหน้า เหมาะกับศัตรูที่เข้ามาใกล้',base:{dmg:6.2,cd:.8,amt:3,sp:.28,v:520,r:12,pierce:2,life:.35,shape:'fire',col:'#ff9a3a',face:1,range:320}});
 def('rock',{tier:1,name:'หินกระเด้ง',icon:'🪨',kind:'bouncer',st:'proj',desc:'ขว้างหินกระดอนไปตามพื้น เด้งได้จำกัดจำนวนครั้ง แล้วแตกสลาย',base:{dmg:16,cd:3.4,amt:1,r:17,bAoe:55,v:300,maxB:4}});
@@ -425,15 +426,15 @@ def('pulse',{tier:2,name:'คลื่นสะท้อน',icon:'💫',kind:'p
 /* --- เทียร์ 3 อีปิค (ม่วง) --- */
 def('meteor',{tier:3,name:'ดาวตก',icon:'☄️',kind:'strike',st:'single',noAmt:1,desc:'อุกกาบาตลูกเดียวตกใส่ศัตรู ยิ่งอัพยิ่งแรงและใหญ่ขึ้น',base:{dmg:180,cd:3,amt:1,R:90,vis:'meteor'}});
 def('laser',{tier:3,name:'เลเซอร์',icon:'🔆',kind:'beam',st:'proj',desc:'ยิงลำแสงทะลุศัตรูทุกตัวในแนวตรง',base:{dmg:46,cd:1.6,amt:1,w:14,len:620,sp:.3,col:'#9ff0ff'}});
-def('swords',{tier:3,name:'ฝนดาบ',icon:'🗡️',kind:'swordrain',st:'circ',noAmt:1,desc:'เสกวงเวทย์เหนือหัวผู้เล่น ดาบหล่นลงมากระหน่ำทั่วบริเวณกว้าง',base:{dmg:159,cd:6,rate:2,dur:3,W:240,pierce:2,col:'#e6e0ff'}});
+def('swords',{tier:3,name:'ฝนดาบ',icon:'🗡️',kind:'swordrain',st:'circ',noAmt:1,desc:'เสกวงเวทย์เหนือหัวผู้เล่น ดาบนับสิบเล่มหล่นลงมาเป็นสายฝนทั่วบริเวณกว้าง',base:{dmg:53.3,cd:6,rate:9,dur:3,W:240,pierce:2,col:'#e6e0ff'}});
 def('spirits',{tier:3,name:'วิญญาณล่า',icon:'👻',kind:'volley',st:'proj',desc:'วิญญาณนำวิถีไล่ล่าศัตรูอย่างแม่นยำ',base:{dmg:32,cd:1.4,amt:3,v:380,r:11,pierce:1,home:.9,life:2.2,shape:'orb',col:'#cfa8ff',sp:.5,face:1,range:700}});
 def('trap',{tier:3,name:'กับดักหลายชั้น',icon:'🧨',kind:'mine',st:'strike',desc:'วางระเบิดหลายลูกรอบตัว ระเบิดวงกว้างและทำให้ช้า',base:{dmg:60,cd:3.0,amt:3,R:92}});
 def('hammer',{tier:3,name:'ค้อนทุบ',icon:'🔨',kind:'slash',st:'proj',desc:'ทุบสองด้านด้วยค้อนยักษ์ วงกว้าง',base:{dmg:67,cd:1.5,amt:1,r:72,off:72,both:1,kb:120,col:'#ffd9a0'}});
 /* --- เทียร์ 4 โกลด์ --- */
 def('storm',{tier:4,name:'พายุสายฟ้า',icon:'🌩️',kind:'storm',st:'storm',desc:'ปล่อยพายุไปด้านหน้าและด้านหลัง ทำดาเมจและตีศัตรูลอยขึ้นฟ้า (บอสไม่ลอย มินิบอสลอยสั้นกว่า)',base:{dmg:90,cd:6,amt:2,r:46,up:.5}});
-def('dragon',{tier:4,name:'มังกรเพลิง',icon:'🐉',kind:'volley',st:'proj',desc:'พ่นไฟมังกรเป็นแฉกขนาดใหญ่ ทะลุทุกตัว',base:{dmg:73,cd:1.9,amt:3,v:560,r:24,pierce:999,life:1.0,shape:'fire',col:'#ffb347',sp:.35,face:1,range:600}});
-def('vortex',{tier:4,name:'หลุมดำ',icon:'🕳️',kind:'hole',st:'hole',noAmt:1,unit:'sec',desc:'ปาก้อนพลังไปไกลตัว กางเป็นหลุมดำดึงศัตรูเข้าศูนย์กลาง (ดึงมอนพิเศษและบอสได้น้อยลง) ไอเท็ม EXP/เลือด/เหรียญในวงถูกส่งเข้าตัว',base:{dmg:45,cd:9,R:120,pull:150,dur:3.2}});
-def('goldrain',{tier:4,name:'ห่าธนูทอง',icon:'🏹',kind:'rain',st:'fall',desc:'ธนูไฟทองคำนับสิบร่วงลงมา ติดไฟเผาศัตรูต่อเนื่อง 3 วิ',base:{dmg:24,cd:4,amt:24,spread:420,pierce:2,shape:'arrow',col:'#ff9a3a',dot:{k:'burn',t:3,f:.4,col:'#ff8a2a'}}});
+def('dragon',{tier:4,name:'มังกรเพลิง',icon:'🐉',kind:'dragon',st:'dbr',noAmt:1,unit:'dragon',desc:'ซัมมอนมังกรจีนบินจากซ้ายไปขวาข้ามจอ ระหว่างบินพ่นไฟค้างลงพื้นแบบเลเซอร์ ทำดาเมจและทำให้ศัตรูติดไหม้ (บอสและมอนที่กันสถานะไม่ติด) พ่นถึงขอบขวาแล้วหยุดและบินจากไป คูลดาวน์เริ่มนับหลังมังกรบินจากไป',base:{dmg:70,cd:12,dur:3.6,W:46,dot:{k:'burn',t:5,col:'#ff8a2a'}}});
+def('vortex',{tier:4,name:'หลุมดำ',icon:'🕳️',kind:'hole',st:'hole',noAmt:1,unit:'sec',desc:'ปาก้อนพลังไปไกลตัว กางเป็นหลุมดำดึงศัตรูเข้าศูนย์กลาง (บอสไม่ถูกดูด มอนพิเศษถูกดึงน้อยลง) คูลดาวน์ 10 วิทุกเลเวล เริ่มนับหลังหลุมหายไป ไอเท็ม EXP/เลือด/เหรียญในวงถูกส่งเข้าตัว',base:{dmg:45,cd:10,R:120,pull:150,dur:3.2}});
+def('goldrain',{tier:4,name:'ห่าธนูทอง',icon:'🏹',kind:'rain',st:'fall',desc:'ธนูไฟทองคำนับสิบร่วงลงมา ติดไฟเผาศัตรูต่อเนื่อง 5 วิ',base:{dmg:24,cd:4,amt:24,spread:420,pierce:2,shape:'arrow',col:'#ff9a3a',dot:{k:'burn',t:5,col:'#ff8a2a'}}});
 def('blade_g',{tier:4,name:'ใบมีดพิฆาต',icon:'⚔️',kind:'orbit',st:'orbit',desc:'ใบมีดทองคำหมุนรอบตัวตลอดเวลา และสปินเร็วหลายเท่าเป็นระยะ',base:{dmg:17,cd:.5,amt:4,R:100,spin:4,size:20,burst:8,burstLen:2,burstMul:4,col:'#ffe08a'}});
 def('missile',{tier:4,name:'ขีปนาวุธนิวเคลียร์',icon:'☢️',kind:'nuke',st:'nuke',noAmt:1,unit:'once',desc:'เรียกขีปนาวุธนิวเคลียร์ลงกลางจอ ระเบิดทั้งหน้าจอด้วยดาเมจก้อนเดียวที่แรงที่สุดในเกม (บอสรับไม่เกิน 25% ของเลือด)',base:{dmg:1000,cd:32}});
 /* --- เทียร์ 5 ตำนาน (แดง) --- */
@@ -451,7 +452,7 @@ const tierOfSkill=d=>d.tier||1;
 const EVO={
  orbit_w:['พายุใบมีด','🌪️','ใบมีด +3 ใหญ่ขึ้น หมุนไวขึ้น อยู่นานขึ้น',{amt:3,dmg:1.6,area:1.3,cd:.8,on:2}],
  knife:['ฝนมีดพันเล่ม','🗡️','มีดทะลุทุกตัว ปาถี่กระหน่ำ',{amt:3,dmg:1.5,pierce:4,cd:.8}],
- axe:['ขวานอสูรผ่าภูเขา','🪓','ขวานใหญ่ยิ่งกว่าเดิม ฟาดเร็วขึ้น วงกว้างขึ้นมาก',{dmg:1.7,area:1.3,cd:.85}],
+ axe:['ดาบมหากาฬ','⚔️','ดาบเล่มเดียวสับทั้งซ้ายและขวา ดาเมจแรงขึ้น ระยะกว้างขึ้น สับถี่ขึ้น',{dmg:1.7,area:1.3,cd:.85,both:1}],
  aura_w:['ออร่าสว่างไสว','🌞','ฟื้นเลือดแรงขึ้นมาก คูลดาวน์สั้นลง',{heal:1.5,cd:.8}],
  spark:['เปลวพิโรธ','🔥','พ่นไฟแฉกใหญ่ ไกลขึ้น ทะลุมากขึ้น',{amt:3,dmg:1.6,area:1.3,pierce:3}],
  rock:['หินผาถล่ม','🌋','หินหลายก้อน ระเบิดกระแทกกว้างขึ้น',{amt:2,dmg:1.8,area:1.3,cd:.8}],
@@ -463,13 +464,13 @@ const EVO={
  pulse:['คลื่นสลาย','🌀','คลื่นกว้างและแรงขึ้นมาก',{amt:1,dmg:1.8,area:1.3,cd:.8}],
  meteor:['ดาวหางล้างโลก','🌠','ดาวหางลูกใหญ่ยักษ์ ตกถี่ขึ้น',{dmg:1.7,area:1.4,cd:.85}],
  laser:['เลเซอร์ทำลายล้าง','🔆','ลำแสงสองทิศ หนาขึ้น หลายเส้น',{amt:2,dmg:1.6,area:1.5,both:1}],
- swords:['ห่าดาบสวรรค์','⚔️','ดาบหนักขึ้นมาก ร่วงถี่ขึ้นและอยู่นานขึ้น',{rate:1,dmg:1.5,dur:1.3,pierce:3}],
+ swords:['ห่าดาบสวรรค์','⚔️','ดาบหนักขึ้นมาก ร่วงถี่ขึ้นและอยู่นานขึ้น',{rate:3,dmg:1.2,dur:1.3,pierce:3}],
  spirits:['ราชันวิญญาณ','💀','วิญญาณเพิ่มอีก 3 ไล่ล่าไวขึ้น',{amt:3,dmg:1.6,pierce:2,cd:.8}],
  trap:['ทุ่นระเบิดนรก','🧨','ทุ่นระเบิดเพิ่ม วงระเบิดกว้าง',{amt:3,dmg:1.6,area:1.3,cd:.8}],
  hammer:['ค้อนเทพเจ้า','🔨','ค้อนยักษ์ทุบถี่ วงกว้างมาก',{amt:1,dmg:1.8,area:1.4,cd:.8}],
  storm:['พายุอัสนีสะท้านฟ้า','🌩️','พายุเพิ่มอีก 2 ลูก ลอยนานขึ้น',{amt:2,dmg:1.5,area:1.25,cd:.85}],
- dragon:['มังกรทมิฬ','🐲','มังกรใหญ่ขึ้น พ่นไฟแรงและถี่',{amt:2,dmg:1.7,area:1.3}],
- vortex:['หลุมดำสิ้นโลก','🌌','ดูดแรงขึ้นมาก วงกว้างบดขยี้ อยู่นานขึ้น',{dmg:1.8,area:1.35,cd:.8,pull:1.6,dur:1.3}],
+ dragon:['มังกรทมิฬ','🐲','มังกรบินพ่นไฟซ้ายไปขวา แล้วพ่นกลับขวาไปซ้าย ไฟกว้างขึ้น ดาเมจแรงขึ้นมาก',{dmg:1.7,area:1.3,cd:.85,both:1}],
+ vortex:['หลุมดำสิ้นโลก','🌌','ดูดแรงขึ้นมาก วงกว้างบดขยี้ อยู่นานขึ้น',{dmg:1.8,area:1.35,pull:1.6,dur:1.3}],
  goldrain:['ห่าธนูเทพ','🏹','ธนูไฟร่วงอีกมหาศาล',{amt:14,dmg:1.5,pierce:3}],
  blade_g:['ใบมีดมหาประลัย','🔥','ใบมีด +3 ใหญ่ขึ้น สปินถี่ขึ้น',{amt:3,dmg:1.6,area:1.3,cd:.8,burst:.75}],
  missile:['นิวเคลียร์ล้างโลก','☢️','ระเบิดแรงขึ้น คูลดาวน์สั้นลง',{dmg:1.4,cd:.8}],
@@ -496,7 +497,7 @@ for(const id in EVO){const a=EVO[id],m=a[3];W[id].evo={name:a[0],icon:a[1],desc:
   const full=(d,base)=>{const s=Object.assign({},base);for(let k=0;k<d.max-1;k++)d.steps[k][1](s);d.evo.fn(s);return s};
   let mx=0;for(const id in W){if(id==='missile')continue;mx=Math.max(mx,full(W[id],W[id].base).dmg)}
   const m=W.missile,mult=full(m,Object.assign({},m.base,{dmg:1})).dmg;
-  m.base.dmg=Math.ceil(1.6*mx/mult);
+  m.base.dmg=Math.ceil(3.2*mx/mult);
 })();
 /* ================= อัพเกรดถาวร (เมนู) ================= */
 const META=[
@@ -525,19 +526,19 @@ const PRE=[
  {k:'rev',i:'👼',n:'ชุบชีวิตฟรี +1',d:'ได้ชุบชีวิตฟรี 1 ครั้งในด่าน (ไม่เสียเหรียญ)',cost:80000}];
 /* ===== สถานะ (แสดงในดัชนี) — สกิลใหม่ที่มี slow/dot/kb/up/pull ใน base จะถูกเพิ่มให้อัตโนมัติ ===== */
 const STATUS=[
- {ic:'🐌',n:'ช้าลง (Slow)',c:'#7fd0ff',d:'ศัตรูเดินช้าลงครึ่งหนึ่งชั่วครู่ ต่ออายุได้เมื่อโดนซ้ำ บอส/มอนมีโล่ไม่ติด',sk:['m_fire','m_ice','n_bomb','trap','judge']},
- {ic:'🩸',n:'เลือดไหล (Bleed)',c:'#ff4a5a',d:'ได้รับดาเมจต่อเนื่องหลายวินาที ขวานยักษ์ใช้ 3% ของเลือดสูงสุดต่อวินาที นาน 4 วิ (ไม่ติดบอส/มอนที่กันสถานะ)',sk:['n_star','axe']},
- {ic:'🔥',n:'ไหม้ (Burn)',c:'#ff8a2a',d:'ได้รับดาเมจจากไฟต่อเนื่องหลายวินาที',sk:['goldrain']},
+ {ic:'🐌',n:'ช้าลง (Slow)',c:'#7fd0ff',d:'ความเร็วเดินลดลง 40% ไม่มีดาเมจ ต่ออายุได้เมื่อโดนซ้ำ เป็นสถานะเดียวกันทั้งสองฝั่ง · ฝั่งศัตรู: บอส/มอนมีโล่ไม่ติด',mob:'🧊 มอนกลายพันธุ์น้ำแข็งทำใส่ผู้เล่น (นาน 5 วิ)',sk:['m_fire','m_ice','n_bomb','trap','judge']},
+ {ic:'🩸',n:'เลือดไหล (Bleed)',c:'#ff4a5a',d:'เสียเลือด 1.2% ของเลือดสูงสุดต่อวินาที นาน 4 วิ เป็นสถานะเดียวกันทั้งสองฝั่ง (ไม่ติดบอส/มอนที่กันสถานะ)',mob:'ยังไม่มีมอนที่ทำเลือดไหลใส่ผู้เล่น',sk:['n_star','axe']},
+ {ic:'🔥',n:'ไหม้ (Burn)',c:'#ff8a2a',d:'เสียเลือด 1.4% ของเลือดสูงสุดต่อวินาที นาน 5 วิ เป็นสถานะเดียวกันทั้งสองฝั่ง (ไม่ติดบอส/มอนที่กันสถานะ)',mob:'🔥 มอนกลายพันธุ์ไฟทำใส่ผู้เล่น (ล้างได้ด้วยออร่าศักดิ์สิทธิ์)',sk:['goldrain']},
  {ic:'💨',n:'ผลักถอยหลัง (Knockback)',c:'#ffd9a0',d:'ศัตรูถูกผลักออกไปตามทิศแรงกระแทก (บอสไม่ถูกผลัก มินิบอส/มอนบินถูกผลักครึ่งเดียว)',sk:['g_rocket','pulse','hammer','tsunami','orbit_w','blade_g','godaura']},
  {ic:'⬆️',n:'ตีลอย (Knock-up)',c:'#fff6a0',d:'ศัตรูลอยขึ้นฟ้าชั่วครู่ (บอสไม่ลอย มินิบอสลอยสั้นกว่า)',sk:['storm']},
- {ic:'🧲',n:'ดึงเข้าหา (Pull)',c:'#c9a8ff',d:'ศัตรูถูกดึงเข้าศูนย์กลาง (บอสโดนดึงน้อยมาก มินิบอสน้อยลง)',sk:['vortex','godaura']},
+ {ic:'🧲',n:'ดึงเข้าหา (Pull)',c:'#c9a8ff',d:'ศัตรูถูกดึงเข้าศูนย์กลาง (บอสไม่โดนดึง มินิบอสน้อยลง)',sk:['vortex','godaura']},
  {ic:'🌫️',n:'มองไม่เห็น (Blind)',c:'#b8b0d8',d:'มอนระยะประชิดในควันตีผู้เล่นไม่โดน (ไม่รวมบอส)',sk:['n_bomb']},
  {ic:'✨',n:'กันสถานะ (ฝั่งผู้เล่น)',c:'#ffe27a',d:'ระหว่างฟื้นเลือด ล้างไฟไหม้/ช้า/พิษ และกัน CC ทุกชนิด',sk:['aura_w']},
- {ic:'☠️',n:'ไฟไหม้ / น้ำแข็ง / พิษ (ที่มอนใส่ผู้เล่น)',c:'#8aff4a',d:'ดีบัฟจากมอนพิเศษ: ไหม้และพิษดูดเลือดต่อเนื่อง น้ำแข็งทำให้เดินช้าลง แสดงตัวนับเวลาใต้แถบเลือด ล้างได้ด้วยออร่าศักดิ์สิทธิ์',sk:['aura_w']},
+ {ic:'☠️',n:'พิษ (Poison)',c:'#8aff4a',d:'เสียเลือด 1.0% ของเลือดสูงสุดต่อวินาที นาน 6 วิ เป็นสถานะเดียวกันทั้งสองฝั่ง · ฝั่งผู้เล่นห้ามฟื้นเลือดตามปกติและดูดเลือดลดลง 80% (ยังไม่มีสกิลฮีโร่ที่ใส่พิษให้มอน หากมีในอนาคตจะใช้เอฟเฟกต์เดียวกัน)',mob:'☠️ มอนกลายพันธุ์พิษทำใส่ผู้เล่น (แสดงตัวนับเวลาใต้แถบเลือด ล้างได้ด้วยออร่าศักดิ์สิทธิ์)',sk:[]},
  {ic:'🛡️',n:'โล่ (ฝั่งมอน)',c:'#8fd0ff',d:'มอนมีโล่กันการโจมตีได้จำนวนครั้งหนึ่ง ระหว่างมีโล่ไม่ติดสถานะใดๆ'}
 ];
 (function(){const idx=s=>STATUS.find(x=>x.n.indexOf(s)===0),add=(st,id)=>{if(st&&st.sk&&st.sk.indexOf(id)<0)st.sk.push(id)};
-  for(const id in W){const b=W[id].base;if(b.slow)add(idx('ช้า'),id);if(b.dot)add(idx(b.dot.k==='burn'?'ไหม้':'เลือดไหล'),id);if(b.kb)add(idx('ผลัก'),id);if(b.up)add(idx('ตีลอย'),id);if(b.pull)add(idx('ดึง'),id)}})();
+  for(const id in W){const b=W[id].base;if(b.slow)add(idx('ช้า'),id);if(b.dot)add(idx(b.dot.k==='burn'?'ไหม้':b.dot.k==='poison'?'พิษ':'เลือดไหล'),id);if(b.kb)add(idx('ผลัก'),id);if(b.up)add(idx('ตีลอย'),id);if(b.pull)add(idx('ดึง'),id)}})();
 const metaCost=(m,l)=>{let c=m.base;for(let k=1;k<=l;k++)c*=k<=4?2+k:1.6;return Math.round(c/10)*10};
 const CFG={mobMul:.3,goldEarly:1,blockFrom:15,xpMul:3,hardA:.35,hardB:.0015,hardStart:19,dmgA:.025,dmgB:.0003,bossRage:90,pickLife:20,gemLife:60,chestMax:5,rerollBase:20000,reviveCost:30000};
 const hardHp=w=>w<=CFG.hardStart?1:1+CFG.hardA*(w-CFG.hardStart)+CFG.hardB*(w-CFG.hardStart)**2;
@@ -590,6 +591,9 @@ function floorAt(x,y){let f=GROUND;for(const pl of PLAT)if(x>pl.x&&x<pl.x+pl.w&&
 const instName=i=>i.evo?W[i.id].evo.name:W[i.id].name;
 const instIcon=i=>i.evo?W[i.id].evo.icon:W[i.id].icon;
 
+/* สูตรกลางของสถานะ: ดาเมจต่อวินาที = % ของเลือดสูงสุดเป้าหมาย × ความแรง (ฮีโร่โตตามเลเวลสกิล มอนใช้ ×1) */
+const DOTR={burn:.014,bleed:.012,poison:.01},SLOWF=.6;
+const potOf=(lvl,evo)=>evo?2:1+.1*(lvl-1);
 function hurt(e,dmg,o={}){
   if(e.dead)return;
   if(e.sh>0){e.sh--;e.flash=.12;txt(e.x,e.y-e.r,'🛡','#8fd0ff');sfx(520,.07,'triangle',.04,200,'shd');part(e.x,e.y-e.r*.5,6,'#8fd0ff',140,.3,2);return}
@@ -598,7 +602,7 @@ function hurt(e,dmg,o={}){
   const ccf=(e.boss||e.sh>0)?0:(e.mut||e.kind==='fly')?.5:1;
   if(o.kb&&ccf>0)e.kx=clamp(e.kx+o.kb*ccf,-260,260);
   if(o.slow)e.slow=Math.max(e.slow,o.slow);
-  if(o.dot&&!(o.dot.nb&&ccf===0)){e.dots=e.dots||{};e.dots[o.dot.k]={t:o.dot.t,dps:o.dot.pm?Math.min(e.max*o.dot.pm,dmg*.8):dmg*o.dot.f,col:o.dot.col,src:sid,acc:0}}
+  if(o.dot&&ccf>0){e.dots=e.dots||{};e.dots[o.dot.k]={t:o.dot.t,dps:e.max*(DOTR[o.dot.k]||.01)*(o.dot.pot||1),col:o.dot.col,src:sid,acc:0}}
   if(o.up&&ccf>0)e.up=Math.max(e.up||0,o.up*ccf);
   if(p.ls>0){const h=Math.min(dmg*p.ls*(p.db.poison>0?.2:1),p.lsTok);p.lsTok-=h;p.hp=Math.min(p.maxhp,p.hp+h)}
   txt(e.x,e.y-e.r,Math.round(dmg),crit?'#ffd34d':'#fff');
@@ -648,6 +652,13 @@ function beamHit(i,s,x0,y0,x1,y1,w,an,cd){
     if(canHit(e,'b'+i.n+'_'+Math.floor(G.time/cd),cd))hurt(e,s.dmg,{kb:Math.cos(an)*80});
     if(blk)break;
   }
+}
+const DRG={LEN:480,OFF:130,Y:120};
+function dragonSt(a){
+  const leg=(a.both&&a.t>=a.T+.6)?1:0,tl=a.t-leg*(a.T+.6),f=clamp(tl/a.T,0,1),span=VW+DRG.LEN+120;let sx,d;
+  if(!leg){d=1;sx=-60+span*f}else{d=-1;sx=VW+60-span*f}
+  const gx=sx+d*DRG.OFF,br=tl>=0&&tl<=a.T&&gx>-10&&gx<VW+10&&sx>-50&&sx<VW+50;
+  return {sx,d,br,gx,hy:DRG.Y+Math.sin(a.t*2.4)*10};
 }
 const FIRE={
   slash(i,s){
@@ -701,10 +712,12 @@ const FIRE={
       shot({x:p.x+ox,y:p.y-8,r:9,dmg:s.dmg,pierce:0,life:1.1+k*.12,noReach:1,noHit:1,expl:(s.R||88)*s.area,slow:1.5,shape:'bomb',col:'#555',fx:s.fx})}
     sfx(200,.1,'square',.03,0,'bm');
   },
-  giantaxe(i,s){
-    const t0=nearest(p.x,p.y-24,520*p.reachM,1);if(!t0)return false;
-    let sx=0,sy=0,n=0;for(const e of E){if(e.dead||e.x<cam.x||e.x>cam.x+VW)continue;if(Math.hypot(e.x-t0.x,e.y-t0.y)<130){sx+=e.x;sy+=e.y;n++}}
-    ACT.push({k:'gaxe',t:0,dur:2.0,tx:n?sx/n:t0.x,ty:n?sy/n:t0.y,tg:t0,dir:t0.x>=p.x?1:-1,R:(s.R||105)*s.area,dmg:s.dmg,dot:{k:'bleed',t:4,pm:.03,nb:1,col:'#ff4a5a'},hit:0,src:curSrc,id:++UID,fx:s.fx});
+  giantsword(i,s){
+    const R=(s.R||125)*s.area,d=p.face||1;
+    /* สับเมื่อมีศัตรูอยู่ในระยะด้านหน้า (หรือทั้งสองด้านถ้าอีโว) */
+    let ok=false;for(const e of E){if(e.dead||e.x<cam.x||e.x>cam.x+VW)continue;const dx=(e.x-p.x)*d;if((dx>-30&&dx<R*2.1)||(s.both&&dx<30&&dx>-R*2.1)){ok=true;break}}
+    if(!ok)return false;
+    ACT.push({k:'gsword',t:0,dur:s.both?2.1:1.25,both:!!s.both,dir:d,R,dmg:s.dmg,dot:s.dot,h1:0,h2:0,src:curSrc,id:++UID,fx:s.fx});
     sfx(180,.5,'triangle',.04,-60,'ax');
   },
   bouncer(i,s){
@@ -748,7 +761,7 @@ const FIRE={
     for(const e of vis){let n=0;for(const o of vis)if(Math.abs(o.x-e.x)<R)n++;if(n>bc){bc=n;best=e}}
     const x=clamp(best.x,cam.x+60,cam.x+VW-60),y=floorAt(x,best.y),src=curSrc,id=++UID;
     FX.push({kind:'orbthrow',x0:p.x,y0:p.y-30,x,y:y-6,t:0,life:.45,col:'#8a5cff'});
-    later(.45,()=>ACT.push({k:'hole',t:0,dur:s.dur,x,y,R,dmg:s.dmg,pull:s.pull||140,acc:0,src,id,fx:s.fx}));
+    i.ex=s.dur+.45;later(.45,()=>ACT.push({k:'hole',t:0,dur:s.dur,x,y,R,dmg:s.dmg,pull:s.pull||140,acc:0,src,id,fx:s.fx}));
     sfx(200,.3,'sine',.06,-100,'hl2');
   },
   storm(i,s){
@@ -792,6 +805,12 @@ const FIRE={
     if(!visEnemies().length)return false;
     ACT.push({k:'smoke',t:0,dur:s.dur,x:p.x,y:p.fl,R:(s.R||110)*s.area,dmg:s.dmg,acc:0,src:curSrc,id:++UID});
     sfx(160,.3,'square',.04,-60,'sm');
+  },
+  dragon(i,s){
+    if(!visEnemies().length)return false;
+    const T=s.dur;i.ex=s.both?T*2+.6:T;
+    ACT.push({k:'dragon',t:0,dur:i.ex+.3,T,both:!!s.both,w:(s.W||46)*s.area,dmg:s.dmg,dot:s.dot,src:curSrc,id:++UID,acc:0,fl:[],sn:0,fx:s.fx});
+    sfx(110,.7,'sawtooth',.06,-50,'drg');
   },
   nuke(i,s){
     if(!visEnemies().length)return false;
@@ -838,6 +857,7 @@ function wstats(i){
   for(let k=0;k<i.lvl-1;k++)d.steps[k][1](s);
   if(i.evo)d.evo.fn(s);
   s.fx=Math.floor((i.lvl-1)/3)+(i.evo?3:0);   /* เอฟเฟกต์เพิ่มตามเลเวลแบบเงียบๆ */
+  if(s.dot)s.dot=Object.assign({},s.dot,{pot:potOf(i.lvl,i.evo)});
   s.dmg*=p.might*p.sdmg;s.cd*=p.cdm;s.area*=p.areaM;s.spd*=p.projSpd;if(!d.noAmt)s.amt+=p.amountB;
   return s;
 }
@@ -962,7 +982,7 @@ function groundPhys(o,h,wasFeet,noPl){
 }
 function updPlayer(dt){
   const ax=(K.r?1:0)-(K.l?1:0);
-  const sp=p.speed*(p.db.ice>0?.6:1);
+  const sp=p.speed*(p.db.ice>0?SLOWF:1);
   p.vx+=(ax*sp-p.vx)*Math.min(1,dt*(ax?16:12));
   if(Math.abs(ax)>.1){p.face=ax>0?1:-1;p.walk+=dt}
   if(K.j&&!p.jh)p.jb=.12;
@@ -980,12 +1000,12 @@ function updPlayer(dt){
   p.inv-=dt;p.flash-=dt;if(p.cure>0)p.cure-=dt;
   /* ดีบัฟ */
   let dps=0;
-  for(const k in p.db){if(p.db[k]>0){p.db[k]-=dt;dps+=k==='fire'?p.maxhp*.014+.6:p.maxhp*.01+.3}}
+  for(const k in p.db){if(p.db[k]>0){p.db[k]-=dt;dps+=k==='fire'?p.maxhp*DOTR.burn:k==='poison'?p.maxhp*DOTR.poison:0}}
   if(dps>0){p.hp-=dps*dt;G.taken+=dps*dt;if(Math.random()<.1)part(p.x,p.y-22,1,p.db.fire>0?'#ff8a2a':p.db.ice>0?'#9fe3ff':'#8aff4a',60,.4,3);if(p.hp<=0)playerDown()}
   if(G.state!=='play')return;
   for(const i of p.wp){const d=W[i.id],s=wstats(i);curSrc=i.id;
     if(UPD[d.kind])UPD[d.kind](i,s,dt);
-    else{i.t-=dt;if(i.t<=0){const r=FIRE[d.kind](i,s);i.t=r===false?.12:s.cd+(d.kind==='heal'?s.dur:0)}}}
+    else{i.t-=dt;if(i.t<=0){const r=FIRE[d.kind](i,s);i.t=r===false?.12:s.cd+(d.kind==='heal'?s.dur:(i.ex||0))}}}
   curSrc='';
 }
 /* ===== ระบบหาทางบนแพลตฟอร์ม: กราฟการกระโดดระหว่างพื้น/แพลตฟอร์มทุกชั้น ===== */
@@ -1075,7 +1095,7 @@ function updEnemies(dt){
       if(e.hp<=0){kill(e);continue}}
     if(e.boss&&!e.rage&&G.time-e.born>CFG.bossRage){e.rage=1;e.spd*=1.4;e.dmg*=1.5;G.note={txt:'🔥 '+e.name.split(' ')[0]+' คลั่ง!',t:2.5};sfx(90,.5,'sawtooth',.07,-30,'rg')}
     if(e.up>0){e.up-=dt;if(e.up>.15){e.y-=300*dt}e.vy=0;e.on=false;e.jv=null;e.x+=e.kx*dt;e.kx*=Math.pow(.01,dt);continue}
-    const sm=e.slow>0?.5:1,dx=p.x-e.x,dir=dx>0?1:-1;
+    const sm=e.slow>0?SLOWF:1,dx=p.x-e.x,dir=dx>0?1:-1;
     e.face=dir;
     if(e.kind==='fly'){
       const dy=pc-e.y,d=Math.hypot(dx,dy)||1;
@@ -1191,7 +1211,7 @@ function updAct(dt){
       case'hole':{
         a.acc+=dt;const tick=a.acc>=.4;if(tick)a.acc=0;
         for(const e of E){if(e.dead)continue;const dx=a.x-e.x,dy=a.y-8-e.y,d=Math.hypot(dx,dy);if(d>a.R+e.r)continue;
-          const f=e.boss?.12:e.mut?.4:e.sh>0?.5:1;
+          const f=e.boss?0:e.mut?.4:e.sh>0?.5:1;
           if(d>8){const mv=Math.min(a.pull*f*dt,d);e.x+=dx/d*mv;if(e.kind==='fly')e.y+=dy/d*mv}
           if(tick)hurt(e,a.dmg,{nc:1})}
         for(const L of [GEM,COIN,HRT])for(const g of L)if(Math.hypot(g.x-a.x,g.y-a.y)<a.R)g.att=1;
@@ -1208,9 +1228,10 @@ function updAct(dt){
         a.acc-=dt;if(a.acc<=0){a.acc=.1;const x0=p.x,y0=p.y-24;
           for(const an of [0,Math.PI]){beamHit({n:a.n},{dmg:a.dmg*.1},x0,y0,x0+Math.cos(an)*a.len,y0,a.w,an,.1)}}
         break}
-      case'gaxe':{
-        if(a.tg&&!a.tg.dead){a.tx+=(a.tg.x-a.tx)*Math.min(1,dt*3);a.ty+=(a.tg.y-a.ty)*Math.min(1,dt*3)}
-        if(!a.hit&&a.t>=1.45){a.hit=1;aoe(a.tx,a.ty+4,a.R,a.dmg,{col:'#ff6a6a',shake:5,fx:a.fx,dot:a.dot,kb:0});vibe(40)}
+      case'gsword':{
+        const hit=(dir)=>{aoe(p.x+dir*a.R*.72,p.y-22,a.R,a.dmg,{col:'#9fd0ff',shake:5,fx:a.fx,dot:a.dot,kb:0});vibe(40)};
+        if(!a.h1&&a.t>=.78){a.h1=1;hit(a.dir)}
+        if(a.both&&!a.h2&&a.t>=1.55){a.h2=1;hit(-a.dir)}
         break}
       case'circle':{
         a.em+=dt*a.rate;const cy=clamp(p.y-200,30,220);
@@ -1223,8 +1244,17 @@ function updAct(dt){
         a.acc+=dt;const tick=a.acc>=.5;if(tick)a.acc-=.5;
         for(const e of E){if(e.dead)continue;const dx=e.x-a.x,dy=e.y-(a.y-20);if(dx*dx+dy*dy<(a.R+e.r)**2){e.smk=.35;if(tick)hurt(e,a.dmg*.5,{slow:.6,nc:1})}}
         break}
+      case'dragon':{
+        const st=dragonSt(a);a.acc+=dt;
+        for(const f of a.fl)f.t+=dt;while(a.fl.length&&a.fl[0].t>1)a.fl.shift();
+        if(a.acc>=.1){a.acc-=.1;
+          if(st.br){const x0=cam.x+st.sx+st.d*48,y0=st.hy+8,x1=cam.x+st.gx,y1=GROUND-6;
+            for(const e of E){if(e.dead)continue;if(distSeg(e.x,e.y,x0,y0,x1,y1)<e.r+a.w)hurt(e,a.dmg,{nc:1,dot:a.dot})}
+            part(x1,y1,3,'#ff8a2a',130,.45,3);a.fl.push({x:x1,t:0});
+            if(++a.sn%4===1)sfx(120,.22,'sawtooth',.035,-30,'drf');if(S.shake)cam.shake=Math.max(cam.shake,1.5)}}
+        break}
       case'nuke':{
-        if(!a.boom&&a.t>=a.fall){a.boom=1;
+        if(!a.boom&&a.t>=a.fall){a.boom=1;part(a.x,GROUND-20,50,'#ff8a2a',420,1.0,5);part(a.x,GROUND-20,30,'#ffd27a',300,.8,4);
           for(const e of E){if(e.dead||e.x<cam.x||e.x>cam.x+VW)continue;const d=e.boss?Math.min(a.dmg,e.max*.25):a.dmg;hurt(e,d,{nc:1})}
           if(S.shake)cam.shake=Math.max(cam.shake,7);vibe(120);sfx(60,.9,'sawtooth',.09,-40,'nx')}
         if(a.boom)a.bt+=dt;
@@ -1601,20 +1631,84 @@ function drawActWorld(){
       const cy=clamp(p.y-200,30,220),rx=a.W,ry=a.W*.2;c.globalAlpha=.9*fade;c.strokeStyle='#b9a8ff';c.shadowColor='#8a6cff';c.shadowBlur=16;c.lineWidth=3;
       c.beginPath();c.ellipse(p.x,cy,rx,ry,0,0,7);c.stroke();c.lineWidth=1.5;c.beginPath();c.ellipse(p.x,cy,rx*.72,ry*.72,0,0,7);c.stroke();
       for(let j=0;j<12;j++){const an=j/12*Math.PI*2+G.time*1.2;c.fillStyle='#d9ceff';c.fillRect(p.x+Math.cos(an)*rx*.86-2,cy+Math.sin(an)*ry*.86-2,4,4)}
-    }else if(a.k==='gaxe'){
-      const cx=p.x,cy=p.y-120,R=a.R,L=R*1.35,d=a.dir;let ax,ay,rot,sc=1,al=1;
-      if(a.t<.5){const f=a.t/.5;ax=cx;ay=cy-20*(1-f);rot=-.5*d*(1-f)-.25*d;sc=.4+.6*f;al=f}
-      else if(a.t<1.45){const f=(a.t-.5)/.95,e=f*f*(3-2*f);ax=cx+(a.tx-cx)*e;ay=cy+(a.ty-R*.2-cy)*e;rot=d*(-.25+e*2.0)}
-      else{ax=a.tx;ay=a.ty-R*.2;rot=d*1.75;al=Math.max(0,1-(a.t-1.45)/.5)}
-      if(a.t<1.45){c.globalAlpha=.25*al;c.strokeStyle='#ff7a7a';c.lineWidth=2;c.setLineDash([7,6]);c.beginPath();c.arc(a.tx,a.ty,R,0,7);c.stroke();c.setLineDash([])}
-      c.globalAlpha=al;c.translate(ax,ay);c.rotate(rot);c.scale(sc,sc);c.shadowColor='#ff8a4a';c.shadowBlur=18;
-      c.fillStyle='#6a4524';c.fillRect(-L*.05,-L*.2,L*.1,L*1.25);c.fillStyle='#4a2f16';c.fillRect(-L*.05,L*.78,L*.1,L*.1);
-      c.fillStyle='#c9d4e2';c.beginPath();c.moveTo(0,-L*.2);c.quadraticCurveTo(L*.95,-L*.45,L*.8,L*.35);c.quadraticCurveTo(L*.45,L*.1,0,L*.2);c.fill();
-      c.fillStyle='#8f9db0';c.beginPath();c.moveTo(0,-L*.2);c.quadraticCurveTo(L*.5,-L*.3,L*.8,L*.35);c.quadraticCurveTo(L*.45,L*.1,0,L*.2);c.fill();
-      c.strokeStyle='#fff';c.lineWidth=2;c.beginPath();c.moveTo(L*.15,-L*.12);c.quadraticCurveTo(L*.78,-L*.3,L*.72,L*.28);c.stroke();
+    }else if(a.k==='gsword'){
+      /* ดาบยักษ์: เสกเหนือหัว (ใบมีดชี้ขึ้น) แล้วสับลงเป็นแนวนอนด้านหน้า ตามตำแหน่งฮีโร่ */
+      const L=a.R*1.5,px=p.x,py=p.y-44,hitT=.78;
+      let rot=0,sc=1,al=1;const D=a.dir,Q=Math.PI/2,t=a.t,eo=f=>1-(1-f)*(1-f),ei=f=>f*f*f;
+      if(t<.35){const f=t/.35;sc=.4+.6*eo(f);al=eo(f)}
+      else if(t<.5)rot=-D*.15*eo((t-.35)/.15);
+      else if(t<hitT)rot=-D*.15+(D*Q+D*.15)*ei((t-.5)/(hitT-.5));
+      else if(!a.both){rot=D*Q;al=Math.max(0,1-(t-hitT)/.45)}
+      else if(t<1.0)rot=D*Q;
+      else if(t<1.3)rot=D*Q+(D*.15-D*Q)*eo((t-1.0)/.3);
+      else if(t<1.55)rot=D*.15+(-D*Q-D*.15)*ei((t-1.3)/.25);
+      else{rot=-D*Q;al=Math.max(0,1-(t-1.55)/.5)}
+      c.globalAlpha=al;
+      if(t<hitT-.25){c.globalAlpha=.22*al;c.strokeStyle='#9fd0ff';c.lineWidth=2;c.setLineDash([7,6]);c.beginPath();c.arc(px+D*a.R*.72,p.y-22,a.R,0,7);c.stroke();c.setLineDash([]);c.globalAlpha=al}
+      else if(a.both&&t>1.0&&t<1.3){c.globalAlpha=.22*al;c.strokeStyle='#9fd0ff';c.lineWidth=2;c.setLineDash([7,6]);c.beginPath();c.arc(px-D*a.R*.72,p.y-22,a.R,0,7);c.stroke();c.setLineDash([]);c.globalAlpha=al}
+      c.translate(px,py);c.rotate(rot);c.scale(sc,sc);c.shadowColor='#8fd0ff';c.shadowBlur=18;
+      const w=L*.17;
+      c.fillStyle='#5a3a1e';c.fillRect(-w*.16,0,w*.32,L*.16);
+      c.fillStyle='#d9a93a';c.fillRect(-w*.95,-L*.035,w*1.9,L*.055);
+      c.fillStyle='#e6f0fb';c.beginPath();c.moveTo(-w*.5,-L*.035);c.lineTo(-w*.58,-L*.82);c.lineTo(0,-L);c.lineTo(w*.58,-L*.82);c.lineTo(w*.5,-L*.035);c.fill();
+      c.fillStyle='#a9bdd4';c.beginPath();c.moveTo(0,-L*.04);c.lineTo(w*.5,-L*.035);c.lineTo(w*.58,-L*.82);c.lineTo(0,-L);c.fill();
+      c.strokeStyle='#fff';c.lineWidth=2;c.beginPath();c.moveTo(0,-L*.1);c.lineTo(0,-L*.82);c.stroke();
+    }else if(a.k==='dragon'){
+      const st=dragonSt(a),d=st.d,hx=cam.x+st.sx,hy=st.hy,N=26,fade=Math.min(1,a.t*3,(a.dur-a.t)*3);
+      c.globalAlpha=fade;
+      /* ไฟที่ค้างอยู่บนพื้นด้านหลัง */
+      for(const f of a.fl){const k=f.t,al=Math.max(0,1-k)*.8,h=26+Math.sin(f.x*.37+G.time*18)*8;c.globalAlpha=al*fade;c.fillStyle=k<.4?'#ffb347':'#ff6a2a';
+        c.beginPath();c.moveTo(f.x-9,GROUND-2);c.quadraticCurveTo(f.x-4,GROUND-h*.6,f.x+Math.sin(G.time*20+f.x)*5,GROUND-h*(1-k*.5));c.quadraticCurveTo(f.x+4,GROUND-h*.6,f.x+9,GROUND-2);c.fill()}
+      c.globalAlpha=fade;
+      /* ลำไฟ */
+      if(st.br){
+        const x0=hx+d*48,y0=hy+8,x1=cam.x+st.gx,y1=GROUND-6,w=a.w;c.lineCap='round';
+        c.shadowColor='#ff6a1a';c.shadowBlur=S.lite?0:20;
+        c.strokeStyle='rgba(255,80,20,.4)';c.lineWidth=w*1.7;c.beginPath();c.moveTo(x0,y0);c.lineTo(x1,y1);c.stroke();
+        c.strokeStyle='#ff9a2a';c.lineWidth=w*1.05;c.beginPath();c.moveTo(x0,y0);c.lineTo(x1,y1);c.stroke();
+        c.strokeStyle='#fff0a0';c.lineWidth=w*.42;c.beginPath();c.moveTo(x0,y0);c.lineTo(x1,y1);c.stroke();c.shadowBlur=0;
+        for(let k=0;k<9;k++){const u=((k/9)+G.time*2.2)%1,bx=x0+(x1-x0)*u+Math.sin(G.time*30+k*2)*8,by=y0+(y1-y0)*u+Math.cos(G.time*26+k)*6;c.fillStyle=k%2?'#ffd27a':'#ff7a2a';c.beginPath();c.arc(bx,by,(5+u*12)*(w/46),0,7);c.fill()}
+        for(let k=0;k<7;k++){const fx=x1+(k-3)*w*.38,h=30+Math.abs(Math.sin(G.time*22+k*1.7))*34;c.fillStyle=k%2?'#ff8a2a':'#ffc247';c.beginPath();c.moveTo(fx-12,GROUND-1);c.quadraticCurveTo(fx-6,GROUND-h*.55,fx+Math.sin(G.time*25+k)*6,GROUND-h);c.quadraticCurveTo(fx+6,GROUND-h*.55,fx+12,GROUND-1);c.fill()}
+      }
+      /* ลำตัวมังกร (จากหางไปหัว) */
+      c.lineCap='butt';
+      for(let n=N-1;n>=0;n--){
+        const bx=hx-d*(n*17+30),by=hy+Math.sin(a.t*5-n*.5)*(10+n*.6),r=21*(1-n/N*.78)+3;
+        c.fillStyle='#d92d17';c.beginPath();c.arc(bx,by,r,0,7);c.fill();
+        c.fillStyle='#f4b13a';c.beginPath();c.arc(bx,by+r*.42,r*.55,0,7);c.fill();
+        if(n%2===0){c.fillStyle='#ffcf4a';c.beginPath();c.moveTo(bx-4,by-r+1);c.lineTo(bx+d*2,by-r-9);c.lineTo(bx+4,by-r+1);c.fill()}
+        if(n===5||n===14){c.strokeStyle='#c42514';c.lineWidth=4;c.beginPath();c.moveTo(bx,by+r*.6);c.lineTo(bx+d*7,by+r+15);c.stroke();c.fillStyle='#ffd27a';for(let q=-1;q<=1;q++){c.beginPath();c.arc(bx+d*7+q*4,by+r+16,2,0,7);c.fill()}}
+      }
+      /* หัวมังกร */
+      c.save();c.translate(hx,hy);c.scale(d*1.25,1.25);
+      c.strokeStyle='#ffcf4a';c.lineWidth=2.2;c.beginPath();c.moveTo(30,4);c.bezierCurveTo(48,16+Math.sin(a.t*6)*4,60,-2,78,10+Math.sin(a.t*6+1)*5);c.stroke();c.beginPath();c.moveTo(30,-2);c.bezierCurveTo(46,-14+Math.sin(a.t*6+2)*4,58,0,74,-8);c.stroke();
+      c.strokeStyle='#ffcf4a';c.lineWidth=4;c.beginPath();c.moveTo(-6,-12);c.quadraticCurveTo(-24,-24,-38,-40);c.stroke();c.beginPath();c.moveTo(0,-12);c.quadraticCurveTo(-14,-30,-24,-46);c.stroke();
+      c.fillStyle='#ffb02e';for(let q=0;q<4;q++){c.beginPath();c.moveTo(-20+q*8,-12);c.lineTo(-14+q*8,-24-q);c.lineTo(-8+q*8,-12);c.fill()}
+      c.fillStyle='#d92d17';c.beginPath();c.ellipse(0,0,24,16,0,0,7);c.fill();
+      c.beginPath();c.moveTo(10,-12);c.quadraticCurveTo(34,-14,42,-3);c.lineTo(14,2);c.closePath();c.fill();
+      c.fillStyle=st.br?'#ff7a1a':'#5a0c08';c.beginPath();c.moveTo(14,2);c.lineTo(40,-1);c.lineTo(38,12);c.quadraticCurveTo(26,18,12,12);c.closePath();c.fill();
+      c.fillStyle='#d92d17';c.beginPath();c.moveTo(12,11);c.quadraticCurveTo(26,20,36,14);c.lineTo(36,18);c.quadraticCurveTo(24,26,10,18);c.closePath();c.fill();
+      c.fillStyle='#fff';for(let q=0;q<4;q++){c.beginPath();c.moveTo(18+q*6,1);c.lineTo(20+q*6,7);c.lineTo(22+q*6,1);c.fill()}
+      c.fillStyle='#ffe9a8';c.beginPath();c.arc(8,-7,5,0,7);c.fill();c.fillStyle='#220';c.beginPath();c.arc(9.5,-7,2.4,0,7);c.fill();
+      c.fillStyle='#ffcf4a';c.beginPath();c.arc(38,-6,2,0,7);c.fill();
+      c.restore();
     }else if(a.k==='nuke'){
-      if(a.t<a.fall){const f=a.t/a.fall,y=-70+(GROUND+40)*f*f;c.translate(a.x,y);c.fillStyle='#bbb';c.fillRect(-9,-34,18,60);c.fillStyle='#e33';c.beginPath();c.moveTo(-9,-34);c.lineTo(0,-58);c.lineTo(9,-34);c.fill();c.fillStyle='#ff8a2a';c.shadowColor='#f60';c.shadowBlur=22;c.beginPath();c.moveTo(-7,26);c.lineTo(0,26+40+Math.random()*16);c.lineTo(7,26);c.fill();
-        c.setTransform(PR,0,0,PR,0,0);c.translate(-cam.x+cam.sx,cam.sy);c.globalAlpha=.4*f;c.strokeStyle='#ff6a3a';c.lineWidth=3;c.setLineDash([8,6]);c.beginPath();c.ellipse(a.x,GROUND-6,60+60*f,12,0,0,7);c.stroke()}
+      if(a.t<a.fall){const f=a.t/a.fall,y=-160+(GROUND+120)*f*f;
+        for(let k=1;k<=10;k++){c.globalAlpha=.5*(1-k/11);c.fillStyle=k<4?'#ffb066':'#9a9aa6';c.beginPath();c.arc(a.x+Math.sin(G.time*9+k)*7,y-70-k*26*(1+f),14+k*3.5,0,7);c.fill()}
+        c.globalAlpha=1;c.translate(a.x,y);c.scale(2.4,2.4);
+        c.fillStyle='#8e939c';c.beginPath();c.moveTo(-9,18);c.lineTo(-20,34);c.lineTo(-9,30);c.fill();c.beginPath();c.moveTo(9,18);c.lineTo(20,34);c.lineTo(9,30);c.fill();
+        c.fillStyle='#c9ced6';c.fillRect(-9,-34,18,60);c.fillStyle='#f5c542';c.fillRect(-9,-8,18,7);c.fillStyle='#222';c.fillRect(-9,-6,18,1.5);c.fillRect(-9,-2.5,18,1.5);
+        c.fillStyle='#e33';c.beginPath();c.moveTo(-9,-34);c.lineTo(0,-62);c.lineTo(9,-34);c.fill();
+        c.fillStyle='#ff8a2a';c.shadowColor='#f60';c.shadowBlur=26;c.beginPath();c.moveTo(-8,26);c.lineTo(0,26+52+Math.random()*22);c.lineTo(8,26);c.fill();c.fillStyle='#ffe27a';c.beginPath();c.moveTo(-4,26);c.lineTo(0,26+30+Math.random()*10);c.lineTo(4,26);c.fill();
+        c.setTransform(PR,0,0,PR,0,0);c.translate(-cam.x+cam.sx,cam.sy);c.shadowBlur=0;c.globalAlpha=.5*f;c.strokeStyle='#ff6a3a';c.lineWidth=3;c.setLineDash([8,6]);c.beginPath();c.ellipse(a.x,GROUND-6,80+90*f,15,0,0,7);c.stroke();c.setLineDash([])}
+      else if(a.boom){
+        /* เมฆเห็ดนิวเคลียร์ */
+        const k=Math.min(1,a.bt/1.45),e1=1-Math.pow(1-Math.min(1,a.bt/.9),2),fa=a.bt>1?Math.max(0,1-(a.bt-1)/.45):1,H=210*e1;
+        c.globalAlpha=fa;c.shadowColor='#ff7a2a';c.shadowBlur=S.lite?0:30;
+        c.fillStyle='#ff7a2a';c.beginPath();c.ellipse(a.x,GROUND-4,150*e1+20,22,0,0,7);c.fill();
+        c.fillStyle='#e8862e';c.fillRect(a.x-(24+14*e1),GROUND-H,48+28*e1,H);
+        for(let q=0;q<9;q++){const an=q/9*6.283+G.time*.6,rr2=(60+30*Math.sin(q*2.3))*e1;c.fillStyle=q%3===0?'#ffcf6a':q%3===1?'#ff8a2a':'#8a3a1a';c.beginPath();c.arc(a.x+Math.cos(an)*rr2*1.25,GROUND-H-12+Math.sin(an)*rr2*.55,34*e1+10,0,7);c.fill()}
+        c.fillStyle='#ffd88a';c.beginPath();c.arc(a.x,GROUND-H-8,40*e1+6,0,7);c.fill();c.shadowBlur=0}
     }
     c.restore();
   }
@@ -1623,7 +1717,7 @@ function drawActScreen(){
   for(const a of ACT){
     if(a.k==='blizzard'){const fade=Math.min(1,a.t*2,(a.dur-a.t)*2);c.save();c.globalAlpha=.12*fade;c.fillStyle='#bfe8ff';c.fillRect(0,0,VW,VH);c.globalAlpha=.85*fade;c.fillStyle='#fff';
       const N=S.lite?24:70;for(let j=0;j<N;j++){const x=((j*97.3+G.time*(40+(j%5)*14))%(VW+40))-20,y=((j*61.7+G.time*(100+(j%7)*30))%(VH+20))-10,r=1.5+(j%4)*.7;c.beginPath();c.arc(x+Math.sin(G.time*2+j)*10,y,r,0,7);c.fill()}c.restore()}
-    else if(a.k==='nuke'&&a.boom){const cx=a.x-cam.x,k=a.bt/1.3;if(k<1){c.save();const R=60+900*k;const g=c.createRadialGradient(cx,GROUND-10,R*.5,cx,GROUND-10,R);g.addColorStop(0,'rgba(255,150,60,0)');g.addColorStop(.85,'rgba(255,120,40,'+(.34*(1-k))+')');g.addColorStop(1,'rgba(255,90,30,0)');c.fillStyle=g;c.fillRect(0,0,VW,VH);c.strokeStyle='rgba(255,170,90,'+(.55*(1-k))+')';c.lineWidth=10*(1-k)+2;c.beginPath();c.arc(cx,GROUND-10,R*.85,0,7);c.stroke();c.restore()}}
+    else if(a.k==='nuke'&&a.boom){const cx=a.x-cam.x,k=a.bt/1.3;if(k<1){c.save();const R=60+900*k;const g=c.createRadialGradient(cx,GROUND-10,R*.5,cx,GROUND-10,R);g.addColorStop(0,'rgba(255,150,60,0)');g.addColorStop(.85,'rgba(255,120,40,'+(.34*(1-k))+')');g.addColorStop(1,'rgba(255,90,30,0)');c.fillStyle=g;c.fillRect(0,0,VW,VH);c.strokeStyle='rgba(255,170,90,'+(.55*(1-k))+')';c.lineWidth=10*(1-k)+2;c.beginPath();c.arc(cx,GROUND-10,R*.85,0,7);c.stroke();const k2=Math.max(0,(a.bt-.25)/1.3);if(k2>0&&k2<1){c.strokeStyle='rgba(255,210,120,'+(.4*(1-k2))+')';c.lineWidth=7*(1-k2)+1;c.beginPath();c.arc(cx,GROUND-10,60+900*k2,0,7);c.stroke()}c.restore()}}
   }
 }
 const GEMS={};function gemSpr(col){let s=GEMS[col+PR];if(!s){s=document.createElement('canvas');s.width=s.height=Math.ceil(24*PR);const x=s.getContext('2d'),m=c;x.scale(PR,PR);x.translate(12,12);c=x;c.fillStyle=col;c.shadowColor=col;c.shadowBlur=8;c.beginPath();c.moveTo(0,-6);c.lineTo(5,0);c.lineTo(0,6);c.lineTo(-5,0);c.fill();c=m;GEMS[col+PR]=s}return s}
@@ -1950,9 +2044,9 @@ function renderCodex(){
   let html='';
   const card=(d,c_,extra)=>`<div class="cxc" data-id="${d.id}" style="--c:${c_}"><div class="ic">${d.icon}</div><b>${d.name}</b><div class="ds">${d.desc}</div><div class="evl">${d.evo.icon} <b>${d.evo.name}</b> <span>${d.evo.desc}</span></div><div class="nm">ดาเมจ ${d.base.dmg} · ${(d.kind==='orbit'||d.kind==='aura')?'ความถี่ของสกิล':'คูลดาวน์'} ${d.base.cd}s${extra||''} · 👆แตะดูรายละเอียด</div></div>`;
   if(cdxTab<0){
-    html+=`<div class="cxh" style="grid-column:1/-1">สถานะทั้งหมดในเกม · แสดงเฉพาะสกิลที่ทำให้เกิดสถานะนั้น (สกิลที่ไม่มีสถานะไม่แสดง)</div>`;
+    html+=`<div class="cxh" style="grid-column:1/-1">สถานะทั้งหมดในเกม · สถานะเดียวกันไม่ว่าใครเป็นคนใส่ (มอนใส่ผู้เล่น หรือสกิลฮีโร่ใส่มอน) · แสดงเฉพาะสกิลที่ทำให้เกิดสถานะนั้น</div>`;
     STATUS.forEach(st=>{const names=(st.sk||[]).map(id=>W[id]?`<span class="stk">${W[id].icon} ${W[id].name}</span>`:'').join('');
-      html+=`<div class="stc" style="--c:${st.c}"><div class="sth"><span class="ic">${st.ic}</span><b>${st.n}</b></div><div class="ds">${st.d}</div>${names?`<div class="stl">${names}</div>`:''}</div>`})
+      html+=`<div class="stc" style="--c:${st.c}"><div class="sth"><span class="ic">${st.ic}</span><b>${st.n}</b></div><div class="ds">${st.d}</div>${st.mob?`<div class="ds" style="margin-top:4px;opacity:.9"><b>จากมอน:</b> ${st.mob}</div>`:''}${names?`<div class="stl"><b style="opacity:.8">จากสกิลฮีโร่:</b> ${names}</div>`:''}</div>`})
   }else if(cdxTab>0){
     const t=TIER[cdxTab-1];html+=`<div class="cxh">ระดับ ${t.n} · ${SHARED.filter(id=>W[id].tier===cdxTab).length} สกิล · ทุกสกิลเลเวลเต็มแล้ววิวัฒนาการได้จากกล่อง (บรรทัด ✨ คือร่างวิวัฒนาการ)</div>`;
     SHARED.filter(id=>W[id].tier===cdxTab).forEach(id=>{html+=card(W[id],t.c)});
@@ -1968,6 +2062,7 @@ function showSkillInfo(id){
   const s1=skillAt(d,1,0),sm=skillAt(d,d.max,0),se=skillAt(d,d.max,1),b=s1.dmg;
   const line=(t,s)=>{const amt=s.amt||1,tot=s.dmg*amt,dps=tot/s.cd;
     if(d.unit==='heal')return `<div class="rw2"><b>${t}</b><br>ฟื้นเลือดค่อยๆ รวม <b>${s.heal.toFixed(0)}</b> HP ใน ${s.dur} วิ · ล้างสถานะผิดปกติ และ <b>ไม่ติดสถานะใดๆ</b> ระหว่างนั้น<br>${fq} ทุก ${s.cd.toFixed(1)} วิ</div>`;
+    if(d.unit==='dragon'){const T=s.dur;return `<div class="rw2"><b>${t}</b><br>ไฟลวกทุก 0.1 วิ ครั้งละ <b>${s.dmg.toFixed(0)}</b> · ศัตรูที่ไฟกวาดผ่านโดนประมาณ 2–4 ครั้ง · บินข้ามจอ ${T} วิ${s.both?' (ไป-กลับ รวม '+(T*2+.6).toFixed(1)+' วิ)':''}<br>${fq} ทุก ${s.cd.toFixed(1)} วิ (นับหลังมังกรบินจากไป)</div>`}
     if(d.unit==='sec'){const per=d.kind==='hole'?s.dmg/.4:s.dmg;return `<div class="rw2"><b>${t}</b><br>ดาเมจ <b>${per.toFixed(0)}</b> ต่อวินาที นาน ${s.dur} วิ (รวม ≈ ${(per*s.dur).toFixed(0)})${s.cov?'':''}<br>${fq} ทุก ${s.cd.toFixed(1)} วิ</div>`}
     if(d.unit==='once')return `<div class="rw2"><b>${t}</b><br>ดาเมจ <b>${s.dmg.toFixed(0)}</b> ใส่ทุกตัวในจอพร้อมกัน (บอสโดนไม่เกิน 25% ของเลือดสูงสุด)<br>${fq} ทุก ${s.cd.toFixed(1)} วิ</div>`;
     if(d.unit==='cloud')return `<div class="rw2"><b>${t}</b><br>เมฆอยู่ ${s.dur} วิ · ฟ้าผ่า <b>${s.dmg.toFixed(0)}</b> ใส่ศัตรูในรัศมี ${s.cov} ครั้งละไม่เกิน ${s.cap} ตัว ทุก 1 วิ<br>${fq} ทุก ${s.cd.toFixed(1)} วิ</div>`;
@@ -1976,6 +2071,7 @@ function showSkillInfo(id){
   $('cdp_b').innerHTML=`<h2 style="color:${col}">${d.icon} ${d.name}</h2><div style="color:#d5d9ff">${d.desc}</div>`+
     line('Lv.1',s1)+line('Lv.'+d.max+' (MAX)',sm)+
     `<div class="rw2" style="border:2px solid #ffd86b"><b>✨ วิวัฒนาการ: ${d.evo.icon} ${d.evo.name}</b><br><small>${d.evo.desc}</small></div>`+line('ร่างวิวัฒนาการ (เมื่อเลเวลเต็ม)',se)+
+    (d.base.dot?(()=>{const k=d.base.dot.k,nm=k==='burn'?'🔥 ไหม้':k==='poison'?'☠️ พิษ':'🩸 เลือดไหล',r=DOTR[k]*100,f=x=>(r*x).toFixed(2).replace(/\.?0+$/,'');return `<div class="rw2" style="border:2px solid ${k==='burn'?'#ff8a2a':'#ff4a5a'}"><b>${nm}</b> ติดกับศัตรูที่โดนสกิลนี้ · พื้นฐาน ${r.toFixed(1)}% ของเลือดสูงสุดศัตรูต่อวินาที นาน ${d.base.dot.t} วิ<br><b>ความแรงสถานะ</b> โตตามเลเวลสกิล +10% ต่อเลเวล: Lv.1 ×1.0 → Lv.${d.max} ×${potOf(d.max,0).toFixed(1)} (${f(potOf(d.max,0))}% ต่อวินาที) → ร่างวิวัฒนาการ ×${potOf(1,1).toFixed(1)} (${f(2)}% ต่อวินาที)<br><small>ไม่ติดบอสและมอนที่ยังมีโล่</small></div>`})():'')+
     `<small>ตัวเลขนี้คิดจากค่าพื้นฐานของสกิลเท่านั้น ในเกมจริงจะคูณด้วยพลังโจมตีถาวร, ตัวคูณฮีโร่ และคริติคอล ×2 ด้วย</small>`;
   $('cdp').classList.remove('hidden');
 }
