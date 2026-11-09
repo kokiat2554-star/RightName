@@ -15,7 +15,7 @@ html,body{margin:0;height:100%;background:#04050d;overflow:hidden;font-family:"P
 .scr{position:absolute;inset:0;display:flex;flex-direction:column}
 .hidden{display:none!important}
 button{font-family:inherit;color:#fff;border:0;cursor:pointer}
-.scroll,.scroll *{touch-action:pan-y}
+.scroll,.scroll *,#cdp_b,#cdp_b *,#bk .dlg,#bk .dlg *,#over .rs,#over .rs *{touch-action:pan-y}
 .scroll{overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
 .scroll::-webkit-scrollbar{width:5px}.scroll::-webkit-scrollbar-thumb{background:#556;border-radius:3px}
 /* ---- ปุ่มควบคุม ---- */
@@ -43,6 +43,7 @@ button{font-family:inherit;color:#fff;border:0;cursor:pointer}
 #bk{gap:6px;background:rgba(3,4,14,.97)}#bk h1{margin:0;font-size:28px}#bk .btn{padding:6px 20px;font-size:17px}
 #bk textarea{width:min(640px,90%)}
 #tinfo{position:absolute;left:18px;bottom:12px;font-size:15px;color:#bcc3ee}
+#tver{position:absolute;right:18px;bottom:12px;font-size:15px;color:#8f97cf;opacity:.85}
 #menu,#codex,#setg{padding:14px 22px 12px}
 .top{display:flex;align-items:center;gap:12px;height:44px}
 .back{width:46px;height:38px;border-radius:10px;background:rgba(255,255,255,.14);font-size:20px;font-weight:800}
@@ -101,12 +102,12 @@ button{font-family:inherit;color:#fff;border:0;cursor:pointer}
 #lvn{font-size:13px;color:#99a}
 .card.sm{width:134px;height:190px}.card.sm .ic{font-size:40px;line-height:50px}.card.sm .nm{font-size:16px}.card.sm .ds{font-size:13px}
 .card.dim{opacity:.55}
-.card{width:196px;height:236px;border-radius:16px;background:linear-gradient(#2c2f5e,#181a38);border:3px solid #6f78ff;padding:12px 12px;display:flex;flex-direction:column;align-items:center;text-align:center;cursor:pointer;position:relative}
+.card{width:196px;height:236px;border-radius:16px;background:linear-gradient(#2c2f5e,#181a38);border:3px solid #6f78ff;padding:12px 12px 22px;display:flex;flex-direction:column;align-items:center;text-align:center;cursor:pointer;position:relative}
 .card:active{transform:translateY(-4px)}
 .card .ic{font-size:54px;line-height:64px}
 .card .nm{font-size:20px;font-weight:800;margin-top:2px}
 .card .lv{font-size:14px;color:#ffd86b;margin-top:2px}
-.card .ds{font-size:15px;color:#d5d9ff;margin-top:8px;line-height:1.3}
+.card .ds{font-size:15px;color:#d5d9ff;margin-top:8px;line-height:1.3;flex:1 1 auto;min-height:0;overflow:hidden;width:100%}
 .card .tg2{position:absolute;top:-11px;color:#06240f;font-size:12px;font-weight:800;padding:2px 12px;border-radius:10px;background:#5de08a;white-space:nowrap}
 .card .key{position:absolute;bottom:6px;font-size:12px;color:#889}
 .rw{background:rgba(0,0,0,.45);border-radius:14px;padding:8px 18px;text-align:center;max-width:860px}
@@ -209,7 +210,7 @@ button{font-family:inherit;color:#fff;border:0;cursor:pointer}
     <button class="tbtn" id="t_set">⚙ ตั้งค่า</button>
     <button class="tbtn" id="t_exit">⏻ ออกเกม</button>
     <button id="t_save" title="สำรองข้อมูล">💾</button>
-    <div id="tinfo"></div>
+    <div id="tinfo"></div><div id="tver"></div>
   </div>
 
   <div id="menu" class="scr bgm hidden">
@@ -231,7 +232,7 @@ button{font-family:inherit;color:#fff;border:0;cursor:pointer}
   </div>
 
   <div id="lvl" class="scr ov hidden"><button id="lvx">✕</button><h1 id="lvh">เลเวลอัพ</h1><div class="rw hidden" id="rw"></div><div class="cards" id="cards"></div><div class="btnrow" style="align-items:center"><button class="btn g" id="lvr" style="font-size:17px;padding:8px 22px">🎲 สุ่มใหม่</button></div><div id="lvn">แตะ ✕ เพื่อพับเก็บไว้เลือกทีหลัง (ไม่เสียสิทธิ์)</div></div>
-  <div id="pause" class="scr ov hidden"><h1>พักเกม</h1><div class="chips" id="pbn" style="max-width:760px"></div><div class="btnrow"><button class="btn" id="resume">▶ เล่นต่อ</button><button class="btn g" id="psetb">⚙ ตั้งค่า</button><button class="btn g" id="quit">ออกจากด่าน</button></div></div>
+  <div id="pause" class="scr ov hidden"><h1>พักเกม</h1><div class="chips" id="pbn" style="max-width:760px"></div><div class="btnrow"><button class="btn" id="resume">▶ เล่นต่อ</button><button class="btn g" id="pcdx">📖 ดัชนี</button><button class="btn g" id="psetb">⚙ ตั้งค่า</button><button class="btn g" id="quit">ออกจากด่าน</button></div></div>
   <div id="chest" class="scr ov hidden"><h1 id="cs_t"></h1><div id="cs_s"></div><div id="cs_reels"></div><div id="cs_res"></div></div>
   <div id="delscr" class="scr ov hidden"><h1>🗑 เลือกสกิลที่จะลบ</h1><div class="drow" id="delrow"></div><div id="delmsg"></div><button class="btn g" id="del_c">ยกเลิก</button></div>
   <div id="swp" class="scr ov hidden"><h1 id="swh">🔄 เลือกสกิลที่จะสลับออก</h1><div class="drow" id="swrow"></div><button class="btn g" id="sw_c">ยกเลิก (กลับไปเลือกการ์ด)</button></div>
@@ -491,6 +492,9 @@ const EVO={
  g_gun:['ปืนกลพายุ','🔫','กระสุนรัวถี่ ทะลุ 1 ตัว',{amt:3,dmg:1.6,cd:.8,pierce:1}],
  g_rocket:['จรวดวันสิ้นโลก','🚀','จรวด 3 ลูก ระเบิดกว้าง',{amt:2,dmg:1.6,area:1.35}]
 };
+/* คำอธิบายสั้นสำหรับการ์ดเลเวลอัพ (ฉบับเต็มอยู่ในดัชนี) */
+const SHORT={k_slash:'ฟันดาบกวาดไปด้านหน้า',k_wave:'ปล่อยคลื่นพลังวิ่งไปตามพื้นสองด้าน',a_arrow:'ยิงธนูใส่ศัตรูที่ใกล้สุด',a_rain:'ยิงธนูขึ้นฟ้า ร่วงลงจุดเดียวหลายดอก',m_fire:'ลูกเวทตามติดศัตรู ระเบิดเป็นวงและทำให้ช้า',m_ice:'พายุหิมะทั้งจอ ดาเมจเบา เน้นทำให้ช้า',n_star:'ขว้างชูริเคนเป็นแฉก ทำให้เลือดไหล',n_bomb:'ควันวงกว้าง มอนประชิด (ไม่รวมบอส) ในควันตีเราไม่โดน',g_gun:'ยิงกระสุนรัวใส่ศัตรูที่ใกล้สุด',g_rocket:'จรวดพุ่งตรง ชนแล้วระเบิดวงกว้าง',orbit_w:'ใบมีดหมุนรอบตัวชั่วคราว แล้วกลับมาใหม่',knife:'ปามีดเร็วใส่ศัตรูที่ใกล้สุด',axe:'เสกดาบยักษ์เหนือหัวแล้วสับลง ดาเมจวงกว้าง เลือดไหล',aura_w:'ฟื้นเลือดค่อยๆ 2 วิ และกันสถานะผิดปกติ',spark:'พ่นไฟแฉกสั้นๆ ไปข้างหน้า',rock:'หินกระเด้งไปตามพื้น เด้งจำกัดแล้วแตก',bolt:'ฟ้าผ่าใส่ศัตรูสุ่มบนจอ',spear:'พุ่งหอกยาวทะลุเป็นแถว',blast:'ลูกไฟนำวิถีเบาๆ ระเบิดใส่กลุ่มศัตรู',boomer:'ขว้างวนกลับ ตีได้ทั้งไปและกลับ',drone:'โดรนลอยรอบตัวคอยยิง กระสุนพุ่งตรง',pulse:'คลื่นรอบตัว ดาเมจเบา ผลักศัตรูเล็กน้อย',meteor:'อุกกาบาตลูกใหญ่ตกใส่ศัตรู',laser:'ลำแสงทะลุศัตรูทุกตัวในแนวตรง',swords:'ดาบนับสิบเล่มหล่นเป็นสายฝน',spirits:'วิญญาณนำวิถีไล่ล่าศัตรู',trap:'วางระเบิดรอบตัว ระเบิดวงกว้างและทำให้ช้า',hammer:'ทุบสองด้านด้วยค้อนยักษ์ วงกว้าง',storm:'พายุไปหน้า-หลัง ตีศัตรูลอยขึ้น',dragon:'มังกรจีนบินข้ามจอ พ่นไฟลงพื้น ติดไหม้',vortex:'หลุมดำดึงศัตรูเข้ากลาง (บอสไม่ถูกดูด)',goldrain:'ธนูไฟทองร่วงเป็นห่า เผาศัตรูต่อเนื่อง',blade_g:'ใบมีดทองหมุนรอบตัวตลอดเวลา สปินเร็วเป็นระยะ',missile:'นิวเคลียร์ลงกลางจอ ดาเมจก้อนเดียวแรงสุด',judge:'เมฆฟ้าผ่าศัตรูในวงวินาทีละครั้ง',shower:'อุกกาบาตหลายลูกกระหน่ำทั้งจอ',holybeam:'ลำแสงหนาค้างหน้า-หลัง ดาเมจต่อวินาที',godaura:'ออร่าทองกว้างแผดเผาศัตรูรอบตัว',godswords:'ดาบเทพลอยรอบตัว พุ่งนำวิถีใส่ศัตรู',tsunami:'คลื่นยักษ์วิ่งตามพื้น ผลักศัตรูถอยหลัง'};
+for(const k in SHORT)if(W[k])W[k].short=SHORT[k];
 for(const id in EVO){const a=EVO[id],m=a[3];W[id].evo={name:a[0],icon:a[1],desc:a[2],fn:s=>{s.dmg*=m.dmg||1;s.amt+=m.amt||0;s.area*=m.area||1;s.cd*=m.cd||1;s.pierce+=m.pierce||0;if(m.both)s.both=1;if(m.home)s.home=(s.home||0)+m.home;if(m.pull&&s.pull)s.pull*=m.pull;if(m.dur)s.dur*=m.dur;if(m.heal)s.heal*=m.heal;if(m.cap)s.cap+=m.cap;if(m.rate)s.rate+=m.rate;if(m.on)s.on+=m.on;if(m.burst)s.burst*=m.burst}}}
 /* ขีปนาวุธนิวเคลียร์: ดาเมจก้อนเดียวต้องสูงกว่าทุกสกิลเสมอ (คำนวณจากร่างวิวัฒนาการสูงสุดของสกิลอื่น ×1.6) */
 (function(){
@@ -1824,6 +1828,9 @@ function togglePause(){
 $('bp').addEventListener('pointerdown',e=>{e.stopPropagation();togglePause()});
 $('resume').onclick=togglePause;
 $('psetb').onclick=()=>{audio();setFromPause=1;$('pause').classList.add('hidden');$('setg').classList.remove('hidden');renderSet()};
+let cdxFromPause=0;
+$('pcdx').onclick=()=>{audio();cdxFromPause=1;$('pause').classList.add('hidden');$('codex').classList.remove('hidden');renderCodex()};
+function closePauseCdx(){cdxFromPause=0;$('cdp').classList.add('hidden');$('codex').classList.add('hidden');$('pause').classList.remove('hidden')}
 function closePauseSet(){setFromPause=0;$('setg').classList.add('hidden');$('pause').classList.remove('hidden')}
 $('quit').onclick=()=>{$('pause').classList.add('hidden');G.quit=1;endRun()};
 document.addEventListener('visibilitychange',()=>{
@@ -1877,16 +1884,23 @@ $('rv_n').onclick=()=>{if(G.state==='revive'){$('rvd').classList.add('hidden');p
 function cardHtml(o,i){
   let ic,nm,ds,tag='',lv='',col='#6f78ff',tcol='#5de08a',cls='';
   if(o.kind==='w'){const d=W[o.id];ic=d.icon;nm=d.name;col=tcolOf(d);
-    if(o.lvl===0){ds=d.desc;lv='Lv.1';tag=o.swap?'🔄 สลับ · สกิลใหม่':d.sig?'สกิลประจำตัว':(d.tier?'สกิล'+TIER[d.tier-1].n+' · ใหม่!':'สกิลใหม่!');tcol=o.swap?'#ff9f43':col;if(o.swap)ds='สกิลเต็มทุกช่อง — เลือกสกิลที่จะสลับออก<br>'+d.desc}
+    if(o.lvl===0){ds=d.short||d.desc;lv='Lv.1';tag=o.swap?'🔄 สลับ · สกิลใหม่':d.sig?'สกิลประจำตัว':(d.tier?'สกิล'+TIER[d.tier-1].n+' · ใหม่!':'สกิลใหม่!');tcol=o.swap?'#ff9f43':col;if(o.swap)ds='สกิลเต็มทุกช่อง — เลือกสกิลที่จะสลับออก<br>'+(d.short||d.desc)}
     else{ds=d.steps[o.lvl-1][0];lv=`Lv.${o.lvl} → Lv.${o.lvl+1}`+(o.lvl+1===d.max?' (MAX)':'')}}
   else if(o.kind==='heal'){cls='sm'+(p.hp>=p.maxhp?' dim':'');ic='🍗';nm='อาหารอร่อย';ds=p.hp>=p.maxhp?'ฟื้นเลือด 30%<br><small>(เลือดเต็มอยู่)</small>':'ฟื้นเลือด 30%';col='#4de08a'}
   else{cls='sm';ic='💰';nm='ถุงเหรียญ';ds='ได้เหรียญทอง +'+(o.v||50);col='#ffd23f'}
   return `<div class="card ${cls}" data-i="${i}" style="border-color:${col}">${tag?`<div class="tg2" style="background:${tcol}">${tag}</div>`:''}<div class="ic">${ic}</div><div class="nm">${nm}</div><div class="lv">${lv}</div><div class="ds">${ds}</div><div class="key">กด ${i+1}</div></div>`;
 }
+/* ย่อตัวอักษรคำอธิบายในการ์ดให้พอดีกล่อง (คำอธิบายสกิลบางตัวยาว) */
+function fitCards(root){
+  root=root||$('cards');
+  root.querySelectorAll('.card .ds').forEach(el=>{let fs=parseFloat(getComputedStyle(el).fontSize)||15;el.style.fontSize=fs+'px';
+    let n=0;while(el.scrollHeight>el.clientHeight+1&&fs>10.5&&n++<20){fs-=.5;el.style.fontSize=fs+'px'}
+    if(el.scrollHeight>el.clientHeight+1){const lh=fs*1.3,lines=Math.max(1,Math.floor(el.clientHeight/lh));el.style.display='-webkit-box';el.style.webkitBoxOrient='vertical';el.style.webkitLineClamp=lines}})
+}
 function showCards(quiet){
   G.state='levelup';K.l=K.r=K.j=0;resetPad();
   $('lvh').textContent='⬆ เลเวลอัพ! เลือก 1 อย่าง'+(G.pending>1?' (เหลือ '+G.pending+' ครั้ง)':'');
-  $('cards').innerHTML=G.opts.map(cardHtml).join('');
+  $('cards').innerHTML=G.opts.map(cardHtml).join('');fitCards();
   const c=rerollCost();$('lvr').textContent=c===0?'🎲 สุ่มใหม่ (ฟรี'+(G.freeRr>1?' ×'+G.freeRr:'')+')':'🎲 สุ่มใหม่ · 💰 '+fmt(c);
   $('lvr').style.opacity=G.gold>=c?1:.45;
   $('lvl').classList.remove('hidden');
@@ -2003,7 +2017,8 @@ function showOver(total,bonus,nb){
 const SCRS=['title','menu','codex','setg'];
 function hideAllScr(){SCRS.forEach(x=>$(x).classList.add('hidden'));['lvl','pause','over','chest','delscr','cfm'].forEach(x=>$(x).classList.add('hidden'))}
 function showScr(id){SCRS.forEach(x=>$(x).classList.toggle('hidden',x!==id));$('touch').classList.add('hidden');if(AC)setBgm('menu');if(id==='title')renderTitle();if(id==='codex')renderCodex();if(id==='setg')renderSet();if(id==='menu')renderMenu()}
-function renderTitle(){refreshCont();$('tinfo').textContent='💰 '+S.gold+'   ·   เวฟสูงสุด '+S.best}
+const APPVER='__APPVER__';
+function renderTitle(){refreshCont();$('tver').textContent='v'+(APPVER.indexOf('__')<0?APPVER:'dev');$('tinfo').textContent='💰 '+S.gold+'   ·   เวฟสูงสุด '+S.best}
 let tab='char',view=S.sel,cdxTab=1;
 /* เงื่อนไขปลดล็อกฮีโร่: ต้องมีคนก่อนหน้า + เคยเล่นคนก่อนหน้า 1 รอบ + ผ่านเวฟ 20 */
 function heroReq(id){
@@ -2050,7 +2065,7 @@ function renderCodex(){
   const tabs=[...TIER.map((t,i)=>`<button data-c="${i+1}" style="${cdxTab===i+1?`border-color:${t.c};color:${t.c}`:''}" class="${cdxTab===i+1?'on':''}">● ${t.n}</button>`),`<button data-c="0" class="${cdxTab===0?'on':''}" style="${cdxTab===0?'border-color:#9fe3ff':''}">สกิลตัวละคร</button>`,`<button data-c="-1" class="${cdxTab===-1?'on':''}" style="${cdxTab===-1?'border-color:#ff9a6a;color:#ff9a6a':''}">🔖 สถานะ</button>`];
   $('cdxtabs').innerHTML=tabs.join('');
   let html='';
-  const card=(d,c_,extra)=>`<div class="cxc" data-id="${d.id}" style="--c:${c_}"><div class="ic">${d.icon}</div><b>${d.name}</b><div class="ds">${d.desc}</div><div class="evl">${d.evo.icon} <b>${d.evo.name}</b> <span>${d.evo.desc}</span></div><div class="nm">ดาเมจ ${d.base.dmg} · ${(d.kind==='orbit'||d.kind==='aura')?'ความถี่ของสกิล':'คูลดาวน์'} ${d.base.cd}s${extra||''} · 👆แตะดูรายละเอียด</div></div>`;
+  const card=(d,c_,extra)=>`<div class="cxc" data-id="${d.id}" style="--c:${c_}"><div class="ic">${d.icon}</div><b>${d.name}</b><div class="ds">${d.short||d.desc}</div><div class="evl">${d.evo.icon} <b>${d.evo.name}</b> <span>${d.evo.desc}</span></div><div class="nm">ดาเมจ ${d.base.dmg} · ${(d.kind==='orbit'||d.kind==='aura')?'ความถี่ของสกิล':'คูลดาวน์'} ${d.base.cd}s${extra||''} · 👆แตะดูรายละเอียด</div></div>`;
   if(cdxTab<0){
     html+=`<div class="cxh" style="grid-column:1/-1">สถานะทั้งหมดในเกม · สถานะเดียวกันไม่ว่าใครเป็นคนใส่ (มอนใส่ผู้เล่น หรือสกิลฮีโร่ใส่มอน) · แสดงเฉพาะสกิลที่ทำให้เกิดสถานะนั้น</div>`;
     STATUS.forEach(st=>{const names=(st.sk||[]).map(id=>W[id]?`<span class="stk">${W[id].icon} ${W[id].name}</span>`:'').join('');
@@ -2141,9 +2156,10 @@ function exitGame(){
   try{window.close()}catch(e){}
   $('t_exit').textContent='ปิดแท็บเบราว์เซอร์ได้เลย';
 }
-document.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>{if(setFromPause)closePauseSet();else showScr('title')});
+document.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>{if(setFromPause)closePauseSet();else if(cdxFromPause)closePauseCdx();else showScr('title')});
 window.onBack=function(){
   if(setFromPause){closePauseSet();return}
+  if(cdxFromPause){if(!$('cdp').classList.contains('hidden'))$('cdp').classList.add('hidden');else closePauseCdx();return}
   if(!$('bk').classList.contains('hidden')){$('bk_n').click();return}
   if(G.state==='play'||G.state==='pause')togglePause();
   else if(G.state==='del')closeDel();
