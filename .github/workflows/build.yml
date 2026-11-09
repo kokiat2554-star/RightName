@@ -17,6 +17,8 @@ jobs:
           D=proj/app/src/main
           mkdir -p $D/java/com/nighthunter/game $D/assets
           cp NightHunter.html $D/assets/index.html
+          # ใส่เลขเวอร์ชันแอพ (ตรงกับ versionName) ลงในเกม
+          sed -i "s/__APPVER__/1.0.${{ github.run_number }}/" $D/assets/index.html
           cat > proj/settings.gradle <<'EOF'
           pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }
           dependencyResolutionManagement { repositories { google(); mavenCentral() } }
